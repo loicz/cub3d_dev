@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/01 18:15:06 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/04 15:12:34 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <string.h>
 # include <math.h>
 # include <sys/time.h>
-# include "mlx.h"
 # include "libft.h"
 
 //FENETRE
