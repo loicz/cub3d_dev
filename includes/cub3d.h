@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/02 16:56:49 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/04 12:36:54 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,8 @@ typedef struct s_game
 
 //parsing
 int	parse_scene(char *path, t_game *game);
+
+//utils
+int	err_msg(char *s);
 
 #endif
