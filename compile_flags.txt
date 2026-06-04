@@ -4,5 +4,5 @@
 -Iincludes
 -Iminilibx-linux
 -Ilibft
--Iminilibx-linux
+-IGNL
 -Isrc
