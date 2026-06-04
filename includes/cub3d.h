@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/04 12:36:54 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/04 23:46:32 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/time.h>
 # include "mlx.h"
 # include "libft.h"
+# include "get_next_line.h"
+# include <stdbool.h>
 
 //FENETRE
 // servir a : ouvrir la fenetre via mlx + engine
@@ -62,6 +64,13 @@
 # define M_KEYRELEASE 2L
 
 //DATA TYPE
+
+typedef struct s_line
+{
+	char			**data;
+	int				size;
+	int				capacity;
+}	t_line;
 
 // un vecteur 2d (ex: coordonees)
 typedef struct s_vec
@@ -155,7 +164,7 @@ typedef struct s_game
 }	t_game;
 
 //parsing
-int	parse_scene(char *path, t_game *game);
+int	parse_scene(char *path, t_game *game, t_line *tmp_line);
 
 //utils
 int	err_msg(char *s);
