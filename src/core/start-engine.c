@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/05 17:11:40 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:33:34 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 	min_win.x = x;
 	min_win.y = 0;
 
+	// if(high_wall)
 	draw_vertical_line(min_win, high_wall, game->frame, game->config.ceil_color); //dessiner le ciel
-	draw_vertical_line(high_wall, low_wall, game->frame, 0xFFFF25FF); //dessiner le mur
 	draw_vertical_line(low_wall, max_win, game->frame, game->config.floor_color); //dessiner le sol
+	draw_vertical_line(high_wall, low_wall, game->frame, 0xFFFF25FF); //dessiner le mur
 }
 
 void	start_engine(t_game *game)
@@ -91,11 +92,11 @@ void	start_engine(t_game *game)
 	while(i < WIN_W)
 	{
 		// dist_ray=launch_ray(i, );
-		dist_ray = 3;
+		dist_ray = 10;
 		high_wall.x = i;
-		high_wall.y = 1/dist_ray * WIN_H;
+		high_wall.y = WIN_H/2 - ((1/dist_ray * WIN_H) / 2);
 		low_wall.x = i;
-		low_wall.y = (1 - 1/dist_ray) * WIN_H;
+		low_wall.y = WIN_H/2 + ((1/dist_ray * WIN_H / 2));
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
@@ -107,9 +108,9 @@ void	initialise_mlx(t_img *img)
 	img->ptr = mlx_init();
 	// printf("ptr: %p\n", img->ptr);
 	img->win = mlx_new_window(img->ptr, img->width, img->height, WIN_TITLE);
-	printf("1:win: %p\n", img->win);
+	// printf("1:win: %p\n", img->win);
 	img->img = mlx_new_image(img->ptr, img->width, img->height);
-	printf("1:img: %p\n", img->img);
+	// printf("1:img: %p\n", img->img);
 	img->addr = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->line_len, &img->endian );
 	img->line_len /= 4;
 }
@@ -126,8 +127,6 @@ int main (void)
 	start_engine(&game);
 	printf("enter\n");
 	mlx_put_image_to_window(game.frame->ptr, game.frame->win, game.frame->img, 0, 0);
-	printf("2:win: %p\n", game.frame->win);
-	printf("2:img: %p\n", game.frame->img);
 	printf("enter\n");
 	mlx_loop(img.ptr);
 }
