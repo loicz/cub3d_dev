@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/04 23:46:32 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/05 16:43:39 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ typedef enum e_dir
 	NORTH = 0,
 	SOUTH = 1,
 	WEST = 2,
-	EAST = 3
+	EAST = 3,
+	UNSET = -1
 }	t_dir;
 
 //informations player
