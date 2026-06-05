@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/04 15:12:34 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/04 16:57:57 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 # include <string.h>
 # include <math.h>
 # include <sys/time.h>
-# include "libft.h"
+# include "../minilibx-linux/mlx.h"
+# include "../libft/libft.h"
+# include "engine.h"
 
 //FENETRE
 // servir a : ouvrir la fenetre via mlx + engine
@@ -74,7 +76,9 @@ typedef struct s_vec
 typedef struct s_img
 {
 	void			*ptr;
-	char			*addr;
+	void			*img;
+	void			*win;
+	int			*addr;
 	int				bpp;
 	int				line_len;
 	int				endian;
