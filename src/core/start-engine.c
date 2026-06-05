@@ -6,16 +6,16 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/05 16:42:01 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:11:40 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-double launch_ray(int nb, )
-{
+// double launch_ray(int nb, )
+// {
 
-}
+// }
 /* void	draw_segment(t_vec point1, t_vec point2, t_img **img, int step)
 {
 	int		i;
@@ -46,7 +46,7 @@ int	get_index(int x, int y, int size_line)
 	return (y * size_line + x);
 }
 
-void	draw_vertical_line(t_vec high, t_vec low, t_img *img, int color)
+void	draw_vertical_line(t_vec low, t_vec high, t_img *img, int color)
 {
 	int i;
 	int y;
@@ -66,7 +66,7 @@ void	draw_vertical_line(t_vec high, t_vec low, t_img *img, int color)
 	}
 }
 
-draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
+void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 {
 	t_vec max_win;
 	t_vec min_win;
@@ -76,12 +76,12 @@ draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 	min_win.x = x;
 	min_win.y = 0;
 
-	draw_vertical_line(min_win, high_wall, &game->frame, game->config.ceil_color); //dessiner le ciel
-	draw_vertical_line(high_wall, low_wall, &game->frame, 0xFFFF25FF); //dessiner le mur
-	draw_vertical_line(low_wall, max_win, &game->frame, game->config.floor_color); //dessiner le sol
+	draw_vertical_line(min_win, high_wall, game->frame, game->config.ceil_color); //dessiner le ciel
+	draw_vertical_line(high_wall, low_wall, game->frame, 0xFFFF25FF); //dessiner le mur
+	draw_vertical_line(low_wall, max_win, game->frame, game->config.floor_color); //dessiner le sol
 }
 
-start_engine(t_game *game)
+void	start_engine(t_game *game)
 {
 	int i;
 	double dist_ray;
@@ -90,7 +90,8 @@ start_engine(t_game *game)
 	i = 0;
 	while(i < WIN_W)
 	{
-		dist_ray=launch_ray(i, );
+		// dist_ray=launch_ray(i, );
+		dist_ray = 3;
 		high_wall.x = i;
 		high_wall.y = 1/dist_ray * WIN_H;
 		low_wall.x = i;
@@ -98,7 +99,6 @@ start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
-	
 }
 void	initialise_mlx(t_img *img)
 {
@@ -107,28 +107,27 @@ void	initialise_mlx(t_img *img)
 	img->ptr = mlx_init();
 	// printf("ptr: %p\n", img->ptr);
 	img->win = mlx_new_window(img->ptr, img->width, img->height, WIN_TITLE);
-	// printf("win: %p\n", img->win);
+	printf("1:win: %p\n", img->win);
 	img->img = mlx_new_image(img->ptr, img->width, img->height);
-	// printf("img: %p\n", img->img);
+	printf("1:img: %p\n", img->img);
 	img->addr = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->line_len, &img->endian );
 	img->line_len /= 4;
 }
 int main (void)
 {
-	// t_game game;
+	t_game game;
 	t_img img;
 	
-	t_vec high;
-	t_vec low;
 	
-	low.x= 56;
-	high.x= low.x;
-	high.y = 700;
-	low.y = 200;
 	initialise_mlx(&img);
-	// game.frame = img;
-	// start_engine(&game);
-	draw_vertical_line(high, low, &img);
-	mlx_put_image_to_window(img.ptr, img.win, img.img, 0, 0);
+	game.frame = &img;
+	game.config.ceil_color = 0xFF0000;
+	game.config.floor_color = 0x00ff1a;
+	start_engine(&game);
+	printf("enter\n");
+	mlx_put_image_to_window(game.frame->ptr, game.frame->win, game.frame->img, 0, 0);
+	printf("2:win: %p\n", game.frame->win);
+	printf("2:img: %p\n", game.frame->img);
+	printf("enter\n");
 	mlx_loop(img.ptr);
 }

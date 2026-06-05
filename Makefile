@@ -20,31 +20,36 @@ SRC_FILES = ./src/core/start-engine.c \
 OBJ_FILES = $(SRC_FILES:.c=.o)
 # OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
 #### RULES ####
-all: ${NAME}
+all: ${NAME} PRINT
 
 
 ${NAME} : ${LIBFT} ${MLX} ${OBJ_FILES} 
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
 
 %.o: %.c
-	${CC} ${CFLAGS} -c $< -o $@ -g3
+	@${CC} ${CFLAGS} -c $< -o $@ -g3
 
 ${LIBFT} :
-	$(MAKE) -C ./libft
+	@$(MAKE) -C ./libft
 
 ${MLX} :
-	$(MAKE) -C ./minilibx-linux 
+	@$(MAKE) -C ./minilibx-linux 
+
+good: re clean
 
 clean:
-	rm -f ${OBJ_FILES}
-	$(MAKE) -C ./libft clean
+	@rm -f ${OBJ_FILES}
+	@$(MAKE) -C ./libft clean
 
 fclean: clean
-	rm -f ${NAME}
-	$(MAKE) -C ./libft fclean
+	@rm -f ${NAME}
+	@$(MAKE) -C ./libft fclean
 
 re: fclean  all
+
 val :
 	@$(VAL) $(LEAKS) ./$(NAME)
+PRINT :
+	@echo $(NAME) ✅
 
-.PHONY: all clean fclean re val
+.PHONY: all clean fclean re good val PRINT

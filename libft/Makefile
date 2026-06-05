@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+         #
+#    By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/20 01:16:04 by lozhao            #+#    #+#              #
-#    Updated: 2025/11/20 02:21:05 by lozhao           ###   ########.fr        #
+#    Updated: 2026/06/05 16:51:40 by tle-rhun         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,18 +45,18 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJS_ALL)
-	$(AR) $@ $^
+	@$(AR) $@ $^
 
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) -I. -c $< -o $@
+	@$(CC) $(CFLAGS) -I. -c $< -o $@
 
 bonus:
 	$(MAKE) BONUS=1 all
 
 clean:
-	$(RM) $(OBJS) $(OBJS_BONUS)
+	@$(RM) $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all

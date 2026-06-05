@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/04 16:57:57 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/05 17:04:16 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ typedef struct s_game
 {
 	void			*mlx;
 	void			*win;
-	t_img			frame;
+	t_img			*frame;
 	t_img			tex[4];
 	t_config		config;
 	t_map			map;
