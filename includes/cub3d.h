@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/05 17:04:16 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:32:17 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/time.h>
 # include "../minilibx-linux/mlx.h"
 # include "../libft/libft.h"
-# include "engine.h"
 
 //FENETRE
 // servir a : ouvrir la fenetre via mlx + engine
@@ -102,7 +101,8 @@ typedef enum e_dir
 //plane : longueur du plan camera
 typedef struct s_player
 {
-	t_vec			pos;
+	t_vec			pos_maps;
+	t_vec			pos_cub;
 	t_vec			dir;
 	t_vec			plane;
 }	t_player;
@@ -156,5 +156,6 @@ typedef struct s_game
 	t_player		player;
 	t_keys			keys;
 }	t_game;
+# include "./engine.h"
 
 #endif
