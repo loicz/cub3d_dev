@@ -21,7 +21,8 @@ D_TEST = ./tests/
 
 #### SOURCE ####
 ENGINE_FILES = $(D_ENGINE)start-engine.c \
-		$(D_ENGINE)draw.c
+		$(D_ENGINE)draw.c \
+		$(D_ENGINE)ray.c \
 
 PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_PARSE)read_scene.c \

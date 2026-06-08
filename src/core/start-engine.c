@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 15:12:50 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 16:36:40 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ void	start_engine(t_game *game)
 	double	dist_ray;
 	t_vec	high_wall;
 	t_vec	low_wall;
+	
 
 	i = 0;
 	while (i < WIN_W)
 	{
-		// dist_ray=launch_ray(i, );
-		dist_ray = 2;
+		
+		
+		dist_ray=launch_ray(i, game);
 		high_wall.x = i;
 		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
 		low_wall.x = i;
@@ -58,6 +60,29 @@ void	initialise_direction_player(t_game *game, int y, int x)
 		game->player.dir.y = 0;
 	}
 }
+void	initialise_plane_player(t_game *game, int y, int x)
+{
+	if(game->map.grid[y][x] == 'N')
+	{
+		game->player.plane.x = 0.66;
+		game->player.plane.y = 0;
+	}
+	if(game->map.grid[y][x] == 'S')
+	{
+		game->player.plane.x = -0.66;
+		game->player.plane.y = 0;
+	}
+	if(game->map.grid[y][x] == 'E')
+	{
+		game->player.plane.x = 0;
+		game->player.plane.y = 0.66;
+	}
+	if(game->map.grid[y][x] == 'W')
+	{
+		game->player.plane.x = 0;
+		game->player.plane.y = -0.66;
+	}
+}
 
 void	initialise_player(t_game *game)
 {
@@ -84,6 +109,7 @@ void	initialise_player(t_game *game)
 		y++;
 	}
 	initialise_direction_player(game, y, x);
+	initialise_plane_player(game, y, x);
 }
 void	initialise_mlx(t_img *img)
 {
@@ -113,7 +139,7 @@ int	main(int ac, char **av)
 	t_game game;
 
 	if (ac != 2)
-	{
+	{free_parser_data(&game);
 		write(2, "Usage: ./parser_test <map.cub>\n", 31);
 		return (1);
 	}
