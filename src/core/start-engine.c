@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 16:36:40 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 21:01:58 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ void	start_engine(t_game *game)
 	i = 0;
 	while (i < WIN_W)
 	{
-		
-		
-		dist_ray=launch_ray(i, game);
+		dist_ray=launch_ray(i, game, game->ray);
+		printf("dist_ray%f:", dist_ray);
 		high_wall.x = i;
 		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
 		low_wall.x = i;
@@ -35,6 +34,8 @@ void	start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
+	mlx_put_image_to_window(game->frame.ptr, game->frame.win, game->frame.img,
+	0, 0);
 }
 
 void	initialise_direction_player(t_game *game, int y, int x)
@@ -44,17 +45,17 @@ void	initialise_direction_player(t_game *game, int y, int x)
 		game->player.dir.x = 0;
 		game->player.dir.y = 1;
 	}
-	if(game->map.grid[y][x] == 'S')
+	else if(game->map.grid[y][x] == 'S')
 	{
 		game->player.dir.x = 0;
 		game->player.dir.y = -1;
 	}
-	if(game->map.grid[y][x] == 'E')
+	else if(game->map.grid[y][x] == 'E')
 	{
 		game->player.dir.x = 1;
 		game->player.dir.y = 0;
 	}
-	if(game->map.grid[y][x] == 'W')
+	else if(game->map.grid[y][x] == 'W')
 	{
 		game->player.dir.x = -1;
 		game->player.dir.y = 0;
@@ -64,23 +65,23 @@ void	initialise_plane_player(t_game *game, int y, int x)
 {
 	if(game->map.grid[y][x] == 'N')
 	{
-		game->player.plane.x = 0.66;
+		game->player.plane.x =  1 * PLANE_LEN;
 		game->player.plane.y = 0;
 	}
-	if(game->map.grid[y][x] == 'S')
+	else if(game->map.grid[y][x] == 'S')
 	{
-		game->player.plane.x = -0.66;
+		game->player.plane.x = -1 * PLANE_LEN;
 		game->player.plane.y = 0;
 	}
-	if(game->map.grid[y][x] == 'E')
+	else if(game->map.grid[y][x] == 'E')
 	{
 		game->player.plane.x = 0;
-		game->player.plane.y = 0.66;
+		game->player.plane.y = 1 * PLANE_LEN;
 	}
-	if(game->map.grid[y][x] == 'W')
+	else if(game->map.grid[y][x] == 'W')
 	{
 		game->player.plane.x = 0;
-		game->player.plane.y = -0.66;
+		game->player.plane.y = -1 * PLANE_LEN;
 	}
 }
 
@@ -95,8 +96,8 @@ void	initialise_player(t_game *game)
 		x = 0;
 		while (game->map.grid[y][x])
 		{
-			if(game->map.grid[y][x] != 'N' || game->map.grid[y][x] != 'S'
-			|| game->map.grid[y][x] != 'E' || game->map.grid[y][x] != 'W')
+			if(game->map.grid[y][x] == 'N' || game->map.grid[y][x] == 'S'
+			|| game->map.grid[y][x] == 'E' || game->map.grid[y][x] == 'W')
 			{
 				game->player.pos.x = x - 0.5;
 				game->player.pos.y = y - 0.5;
@@ -129,7 +130,7 @@ void	initialise_mlx(t_img *img)
 void initialise_all(t_game *game)
 {
 	initialise_mlx(&game->frame);
-	initialise_player(game);
+	// initialise_player(game);
 	game->config.ceil_color = 0xFF0000;
 	game->config.floor_color = 0x00ff1a;
 }
@@ -148,8 +149,7 @@ int	main(int ac, char **av)
 		return (1);
 	initialise_all(&game);
 	start_engine(&game);
-	mlx_put_image_to_window(game.frame.ptr, game.frame.win, game.frame.img,
-	0, 0);
+
 	mlx_loop(game.frame.ptr);
 	// free_parser_data(&game);
 	return (0);

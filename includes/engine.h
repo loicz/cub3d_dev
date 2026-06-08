@@ -6,12 +6,12 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 16:07:17 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 16:36:53 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 19:25:42 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // RAY
-double launch_ray(int nb, t_game *game);
+double launch_ray(int nb, t_game *game, t_ray ray);
 // DRAW
 int	get_index(int x, int y, int size_line);
 void	draw_vertical_line(t_vec low, t_vec high, t_img img, int color);

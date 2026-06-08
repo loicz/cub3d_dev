@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/08 15:14:11 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 19:50:58 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	err_msg(char *s)
 	return (1);
 }
 
-void	exit(t_game *game)
+void	exit_cub3d(t_game *game)
 {
 	free_parser_data(game);
 	exit(1);

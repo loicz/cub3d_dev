@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/08 15:08:14 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 19:42:25 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,14 @@ typedef struct s_player
 	t_vec			plane;
 }	t_player;
 
+typedef struct s_ray
+{
+	t_vec			rayDir;
+	t_vec			pos;
+	t_vec			deltaDist;
+	t_vec			sideDist;
+	t_vec			step;
+}	t_ray;
 //map
 /* grid    : tableau de lignes, acces case par grid[y][x]
    row_len : longueur reelle de chaque ligne (a verifier avant acces)
@@ -165,6 +173,7 @@ typedef struct s_game
 	t_config		config;
 	t_map			map;
 	t_player		player;
+	t_ray		ray;
 	t_keys			keys;
 }	t_game;
 # include "./engine.h"
