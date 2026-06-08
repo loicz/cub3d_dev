@@ -10,8 +10,6 @@ VAL = valgrind
 LEAKS = -s --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes
 HEADER_PATH = includes
 CC= cc
-# CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
-CFLAGS=-Wall -Wextra -Werror -g3
 INC = -I $(HEADER_PATH) -I ./libft -I ./minilibx-linux -IGNL
 # OBJ=ft_*.c =.o
 # SRCS = $(HEADER_PATH)ft_atoi
@@ -49,13 +47,13 @@ TEST_OBJ = $(TEST_FILES:.c=.o)
 # HEADER_PATH = include
 CC= cc
 # CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=-Wall -Wextra -Werror -g3
 # OBJ=ft_*.c =.o
 # SRCS = $(HEADER_PATH)ft_atoi
 
 #### SOURCE ####
 OBJ_FILES = $(SRC_FILES:.c=.o)
-# OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
+
 #### RULES ####
 all: ${NAME} PRINT
 

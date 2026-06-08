@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/05 17:58:25 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 15:09:56 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	get_index(int x, int y, int size_line)
 	return (y * size_line + x);
 }
 
-void	draw_vertical_line(t_vec low, t_vec high, t_img *img, int color)
+void	draw_vertical_line(t_vec low, t_vec high, t_img img, int color)
 {
 	int i;
 	int y;
@@ -56,8 +56,8 @@ void	draw_vertical_line(t_vec low, t_vec high, t_img *img, int color)
 		return ;
 	while (i <= high.y - low.y)
 	{
-		if (x >= 0 && x <= img->width && y >= 0 && y <= img->height)
-			img->addr[get_index(x, y, img->line_len)] = color;
+		if (x >= 0 && x <= img.width && y >= 0 && y <= img.height)
+			img.addr[get_index(x, y, img.line_len)] = color;
 		y++; 
 		i++;
 	}
