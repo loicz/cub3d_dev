@@ -45,6 +45,19 @@ TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 TEST_OBJ = $(TEST_FILES:.c=.o)
+# SUPP = --suppressions=$(PWD)/readline.supp
+# HEADER_PATH = include
+CC= cc
+# CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
+CFLAGS=-Wall -Wextra -Werror
+# OBJ=ft_*.c =.o
+# SRCS = $(HEADER_PATH)ft_atoi
+D_ENGINE = ./src/core/
+
+#### SOURCE ####
+SRC_FILES = $(D_ENGINE)start-engine.c \
+		$(D_ENGINE)draw.c
+OBJ_FILES = $(SRC_FILES:.c=.o)
 # OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
 #### RULES ####
 all: ${NAME} PRINT

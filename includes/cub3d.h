@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/07 16:33:21 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/08 12:35:22 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include <stdbool.h>
+# include "../minilibx-linux/mlx.h"
+# include "../libft/libft.h"
 
 //FENETRE
 // servir a : ouvrir la fenetre via mlx + engine
@@ -84,7 +86,9 @@ typedef struct s_vec
 typedef struct s_img
 {
 	void			*ptr;
-	char			*addr;
+	void			*img;
+	void			*win;
+	int			*addr;
 	int				bpp;
 	int				line_len;
 	int				endian;
@@ -156,13 +160,14 @@ typedef struct s_game
 {
 	void			*mlx;
 	void			*win;
-	t_img			frame;
+	t_img			*frame;
 	t_img			tex[4];
 	t_config		config;
 	t_map			map;
 	t_player		player;
 	t_keys			keys;
 }	t_game;
+# include "./engine.h"
 
 //parsing
 int		parse_scene(char *path, t_game *game);
