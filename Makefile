@@ -52,11 +52,8 @@ CC= cc
 CFLAGS=-Wall -Wextra -Werror
 # OBJ=ft_*.c =.o
 # SRCS = $(HEADER_PATH)ft_atoi
-D_ENGINE = ./src/core/
 
 #### SOURCE ####
-SRC_FILES = $(D_ENGINE)start-engine.c \
-		$(D_ENGINE)draw.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
 # OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
 #### RULES ####

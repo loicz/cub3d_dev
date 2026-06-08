@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 11:38:58 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 12:51:22 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,20 +99,30 @@ void	initialise_mlx(t_img *img)
 			&img->endian);
 	img->line_len /= 4;
 }
-int	main(void)
+int	main(int ac, char **av)
 {
 	t_game game;
 	t_img img;
 
+	if (ac != 2)
+	{
+		write(2, "Usage: ./parser_test <map.cub>\n", 31);
+		return (1);
+	}
+	ft_bzero(&game, sizeof(t_game));
+	if (parse_scene(av[1], &game))
+		return (1);
 	initialise_mlx(&img);
 	game.frame = &img;
+	initialise_player(&game);
 	game.config.ceil_color = 0xFF0000;
 	game.config.floor_color = 0x00ff1a;
-	initialise_player(&game);
 	start_engine(&game);
 	// printf("enter\n");
 	mlx_put_image_to_window(game.frame->ptr, game.frame->win, game.frame->img,
-		0, 0);
-	// printf("enter\n");
+	0, 0);
+		// printf("enter\n");
 	mlx_loop(img.ptr);
+	free_parser_data(&game);
+	return (0);
 }
