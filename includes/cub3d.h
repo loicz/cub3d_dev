@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/05 18:32:17 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 11:36:14 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ typedef enum e_dir
 //plane : longueur du plan camera
 typedef struct s_player
 {
-	t_vec			pos_maps;
-	t_vec			pos_cub;
+	t_vec			pos;
 	t_vec			dir;
 	t_vec			plane;
 }	t_player;

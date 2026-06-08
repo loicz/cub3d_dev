@@ -6,16 +6,13 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/05 19:02:21 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/08 11:38:58 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// double launch_ray(int nb, )
-// {
 
-// }
 
 void	start_engine(t_game *game)
 {
@@ -76,8 +73,8 @@ void	initialise_player(t_game *game)
 			if(game->map.grid[y][x] != 'N' || game->map.grid[y][x] != 'S'
 			|| game->map.grid[y][x] != 'E' || game->map.grid[y][x] != 'W')
 			{
-				game->player.pos_maps.x = x;
-				game->player.pos_maps.y = y;
+				game->player.pos.x = x - 0.5;
+				game->player.pos.y = y - 0.5;
 				break;
 			}
 			x++;
@@ -86,8 +83,6 @@ void	initialise_player(t_game *game)
 			break;
 		y++;
 	}
-	game->player.pos_cub.x = 0.5;
-	game->player.pos_cub.y = 0.5;
 	initialise_direction_player(game, y, x);
 }
 void	initialise_mlx(t_img *img)
