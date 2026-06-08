@@ -1,0 +1,90 @@
+#### VARIABLES ####
+NAME = cub3d
+TEST = parser_test
+LIBFT = ./libft/libft.a
+MLX = ./minilibx-linux/libmlx.a
+
+
+
+VAL = valgrind
+LEAKS = -s --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes
+HEADER_PATH = includes
+CC= cc
+# CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
+CFLAGS=-Wall -Wextra -Werror -g3
+INC = -I $(HEADER_PATH) -I ./libft -I ./minilibx-linux -IGNL
+# OBJ=ft_*.c =.o
+# SRCS = $(HEADER_PATH)ft_atoi
+D_ENGINE = ./src/core/
+D_PARSE = ./src/parsing/
+D_UTILS = ./src/utils/
+D_GNL = ./GNL/
+D_TEST = ./tests/
+
+#### SOURCE ####
+ENGINE_FILES = $(D_ENGINE)start-engine.c \
+		$(D_ENGINE)draw.c
+
+PARSER_FILES =	$(D_PARSE)parse_scene.c \
+				$(D_PARSE)read_scene.c \
+				$(D_PARSE)get_config.c \
+				$(D_PARSE)get_config_store.c \
+				$(D_PARSE)get_config_utils.c \
+				$(D_PARSE)map_lines.c \
+				$(D_PARSE)map_build.c \
+				$(D_PARSE)map_check.c \
+				$(D_PARSE)map_check_utils.c \
+				$(D_PARSE)parser_free.c \
+				$(D_GNL)get_next_line.c \
+				$(D_UTILS)utils.c \
+				$(D_GNL)get_next_line_utils.c
+
+SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES)
+
+TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
+
+OBJ_FILES = $(SRC_FILES:.c=.o)
+TEST_OBJ = $(TEST_FILES:.c=.o)
+# OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
+#### RULES ####
+all: ${NAME} PRINT
+
+
+${NAME} : ${LIBFT} ${MLX} ${OBJ_FILES}
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
+
+$(TEST) : $(LIBFT) $(TEST_OBJ)
+	@$(CC) $(CFLAGS) $(TEST_OBJ) $(LIBFT) -o $(TEST)
+
+%.o: %.c
+	@${CC} ${CFLAGS} $(INC) -c $< -o $@
+
+${LIBFT} :
+	@$(MAKE) -C ./libft
+
+${MLX} :
+	@$(MAKE) -C ./minilibx-linux
+
+good: re clean
+
+clean:
+	@rm -f ${OBJ_FILES} ${TEST_OBJ}
+	@$(MAKE) -C ./libft clean
+	@$(MAKE) -C ./minilibx-linux clean
+
+fclean: clean
+	@rm -f ${NAME} ${TEST}
+	@$(MAKE) -C ./libft fclean
+
+re: fclean all
+
+val : ${NAME}
+	@$(VAL) $(LEAKS) ./$(NAME)
+
+parser: $(TEST)
+	@echo "$(TEST) ✅"
+
+PRINT :
+	@echo $(NAME) ✅
+
+.PHONY: all clean fclean re good val parser val-parser PRINT

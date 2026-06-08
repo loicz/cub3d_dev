@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/05 16:43:39 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/07 16:33:21 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,21 @@ typedef struct s_game
 }	t_game;
 
 //parsing
-int	parse_scene(char *path, t_game *game, t_line *tmp_line);
+int		parse_scene(char *path, t_game *game);
+int		read_scene(int fd, t_game *game, t_line *tmp_line);
+int		get_map_config(t_game *game, bool *map_start, char *line);
+int		get_map_content(t_line *tmp, bool map_start, char *line);
+int		build_map(t_game *game, t_line *tmp);
+int		validate_map(t_game *game);
+int		write_colors(char *line, char color_p, t_game *game);
+int		is_config_space(char c);
+int		is_config_id(char *line);
+int		read_config_info(t_game *game, char *line);
+int		is_player_char(char c);
+int		is_valid_char(char c);
+void	free_tmp_lines(t_line *tmp);
+void	free_parser_data(t_game *game);
+int		is_map_closed(t_map *map);
 
 //utils
 int	err_msg(char *s);
