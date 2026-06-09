@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/09 16:42:09 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 17:46:37 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ typedef struct s_ray
 	t_vec			deltaDist;
 	t_vec			sideDist;
 	t_vec			step;
+	int				mapX;
+	int				mapY;
 }	t_ray;
 //map
 /* grid    : tableau de lignes, acces case par grid[y][x]

@@ -6,38 +6,13 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/09 17:07:39 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 17:26:16 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/cub3d.h"
 
-/* void	draw_segment(t_vec point1, t_vec point2, t_img **img, int step)
-{
-	int		i;
-	float	dx;
-	float	dy;
-	float	x;
-	float	y;
-
-	dx = point2.x - point1.x;
-	dy = point2.y - point1.y;
-	step = fmax(fabs(dx), fabs(dy));
-	dx = dx / step;
-	dy = dy / step;
-	x = point1.x;
-	y = point1.y;
-	i = 0;
-	while (i <= step)
-	{
-		if (x >= 0 && x <= (*img)->height && y >= 0 && y <= (*img)->width)
-			(*img)->addr[get_index(x, y, (*img)->line_len)] = 0xFFFF25FF;
-		x = x + dx;
-		y = y + dy;
-		i++;
-	}
-} */
 int	get_index(int x, int y, int size_line)
 {
 	return (y * size_line + x);
