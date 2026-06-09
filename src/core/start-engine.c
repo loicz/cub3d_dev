@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 12:51:22 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 17:23:34 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	start_engine(t_game *game)
 	i = 0;
 	while (i < WIN_W)
 	{
-		// dist_ray=launch_ray(i, );
-		dist_ray = 2;
+		dist_ray=launch_ray(i, game, game->ray);
 		high_wall.x = i;
 		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
 		low_wall.x = i;
@@ -33,76 +32,25 @@ void	start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
+	mlx_put_image_to_window(game->frame.ptr, game->frame.win, game->frame.img,
+	0, 0);
 }
 
-void	initialise_direction_player(t_game *game, int y, int x)
-{
-	if(game->map.grid[y][x] == 'N')
-	{
-		game->player.dir.x = 0;
-		game->player.dir.y = 1;
-	}
-	if(game->map.grid[y][x] == 'S')
-	{
-		game->player.dir.x = 0;
-		game->player.dir.y = -1;
-	}
-	if(game->map.grid[y][x] == 'E')
-	{
-		game->player.dir.x = 1;
-		game->player.dir.y = 0;
-	}
-	if(game->map.grid[y][x] == 'W')
-	{
-		game->player.dir.x = -1;
-		game->player.dir.y = 0;
-	}
-}
-
-void	initialise_player(t_game *game)
-{
-	int y;
-	int x;
-
-	y = 0;
-	while (game->map.grid[y])
-	{
-		x = 0;
-		while (game->map.grid[y][x])
-		{
-			if(game->map.grid[y][x] != 'N' || game->map.grid[y][x] != 'S'
-			|| game->map.grid[y][x] != 'E' || game->map.grid[y][x] != 'W')
-			{
-				game->player.pos.x = x - 0.5;
-				game->player.pos.y = y - 0.5;
-				break;
-			}
-			x++;
-		}
-		if(game->map.grid[y][x] != '\0')
-			break;
-		y++;
-	}
-	initialise_direction_player(game, y, x);
-}
 void	initialise_mlx(t_img *img)
 {
 	img->height = WIN_H;
 	img->width = WIN_W;
 	img->ptr = mlx_init();
-	// printf("ptr: %p\n", img->ptr);
 	img->win = mlx_new_window(img->ptr, img->width, img->height, WIN_TITLE);
-	// printf("1:win: %p\n", img->win);
 	img->img = mlx_new_image(img->ptr, img->width, img->height);
-	// printf("1:img: %p\n", img->img);
 	img->addr = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
 			&img->endian);
 	img->line_len /= 4;
 }
+
 int	main(int ac, char **av)
 {
 	t_game game;
-	t_img img;
 
 	if (ac != 2)
 	{
@@ -112,17 +60,10 @@ int	main(int ac, char **av)
 	ft_bzero(&game, sizeof(t_game));
 	if (parse_scene(av[1], &game))
 		return (1);
-	initialise_mlx(&img);
-	game.frame = &img;
-	initialise_player(&game);
-	game.config.ceil_color = 0xFF0000;
-	game.config.floor_color = 0x00ff1a;
+	initialise_mlx(&game.frame);
 	start_engine(&game);
-	// printf("enter\n");
-	mlx_put_image_to_window(game.frame->ptr, game.frame->win, game.frame->img,
-	0, 0);
-		// printf("enter\n");
-	mlx_loop(img.ptr);
-	free_parser_data(&game);
+	
+	mlx_loop(game.frame.ptr);
+	// free_parser_data(&game);
 	return (0);
 }
