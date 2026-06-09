@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/08 12:37:51 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 15:00:54 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ typedef struct s_vec
 //(tu peux modifier en stucture de donnees que tu preferes si tu veux)
 typedef struct s_img
 {
-	void			*ptr;
+	void			*mlx;
 	void			*img;
 	void			*win;
-	int			*addr;
+	int				*addr;
 	int				bpp;
 	int				line_len;
 	int				endian;
@@ -158,8 +158,6 @@ typedef struct s_keys
    accede a tout le monde (player / map / frame / keys) */
 typedef struct s_game
 {
-	void			*mlx;
-	void			*win;
 	t_img			*frame;
 	t_img			tex[4];
 	t_config		config;
