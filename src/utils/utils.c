@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/09 23:00:51 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/10 00:50:32 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ void	destroy_mlx(t_game *game)
 
 int	on_destroy(t_game *game)
 {
-	destroy_mlx(game);
-	free_parser_data(game);
-	exit(0);
+	mlx_loop_end(game->mlx.ptr);
 	return (0);
 }
 // void	close_window(t_game *game, t_img img)
