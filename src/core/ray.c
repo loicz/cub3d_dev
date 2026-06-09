@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 21:02:34 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 12:14:39 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ double launch_ray(int nb, t_game *game, t_ray ray)
 		{
 			ray.sideDist.x += ray.deltaDist.x;
 			mapX += ray.step.x;
-			len_ray += ray.sideDist.x;
 			// side = 0;
 		}
 		else
 		{
 			ray.sideDist.y += ray.deltaDist.y;
 			mapY += ray.step.y;
-			len_ray += ray.sideDist.y;
 			// side = 1;
 		}
-		if (game->map.grid[mapX][mapY] > 0)
+
+		if (game->map.grid[mapX][mapY] == '1')
 			break;
 	}
+	len_ray = mapX - game->player.pos.x + mapY - game->player.pos.y;
 	// if (side == 0)
 	// 	perp_wall_dist = ray.sideDist.x - ray.deltaDist.x;
 	// else
