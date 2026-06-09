@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/08 19:42:25 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 16:42:09 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ typedef struct s_player
 typedef struct s_ray
 {
 	t_vec			rayDir;
-	t_vec			pos;
 	t_vec			deltaDist;
 	t_vec			sideDist;
 	t_vec			step;

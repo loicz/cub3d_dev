@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/08 21:10:48 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 17:07:39 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ void	draw_vertical_line(t_vec low, t_vec high, t_img img, int color)
 	int i;
 	int y;
 	int x;
+	int distance;
 
 	i = 0;
 	y = low.y;
 	x = low.x;
 	if(high.x != low.x)
 		return ;
-	while (i <= low.y - high.y)
+	distance = (int)fabs(low.y - high.y);
+	while (i <= distance)
 	{
 		if (x >= 0 && x <= img.width && y >= 0 && y <= img.height)
 			img.addr[get_index(x, y, img.line_len)] = color;
