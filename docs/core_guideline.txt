@@ -1,0 +1,273 @@
+1. Le parser est la source de vérité pour la map et le player
+
+Le core ne doit jamais reparcourir la map pour retrouver ou réinitialiser le player.
+
+Après parse_scene(), les données suivantes sont déjà valides :
+
+game->map.grid
+game->map.row_len
+game->map.height
+game->map.width
+game->player.pos
+game->player.dir
+game->player.plane
+game->config.tex_path[4]
+game->config.floor_color
+game->config.ceil_color
+
+Le core doit les utiliser directement.
+
+
+après le parser.
+
+Le parser place déjà le player au centre de sa case avec une position de type double.
+
+
+
+2. Convention de coordonnées officielle
+
+La map est stockée en char **grid
+
+On accède aux cases avec :
+
+grid[y][x]
+
+Donc :
+
+grid[0] = première ligne de la map, visuellement en haut
+grid[1] = deuxième ligne
+grid[2] = troisième ligne
+
+
+Dans ce système :
+
+aller vers le haut de la map    => y - 1
+aller vers le bas de la map     => y + 1
+aller vers la droite de la map  => x + 1
+aller vers la gauche de la map  => x - 1
+
+
+Convention obligatoire :
+
+NORTH : dir = ( 0, -1)
+SOUTH : dir = ( 0,  1)
+EAST  : dir = ( 1,  0)
+WEST  : dir = (-1,  0)
+
+
+Important : dir.y = -1 ne veut pas dire que la position du player est négative. Cela veut seulement dire que le player regarde vers la direction où y diminue.
+
+
+3. Accès à la map : toujours utiliser row_len
+
+La map peut être irrégulière. Toutes les lignes n’ont pas forcément la même longueur.
+
+comme seule vérification avant d’accéder à une case.
+
+Obligatoire :
+
+if (y < 0 || y >= game->map.height)
+	return (0);
+if (x < 0 || x >= game->map.row_len[y])
+	return (0);
+
+
+Puis seulement après :
+
+game->map.grid[y][x]
+
+
+Règle : ne jamais accéder à grid[y][x] sans avoir vérifié y avec height et x avec row_len[y].
+
+
+
+4. Responsabilité du core
+
+Le core / engine est responsable de :
+
+a. initialiser MLX
+b. créer la fenêtre
+c. créer l’image de frame
+d. charger les textures
+e. lancer le raycasting
+f. dessiner le ceiling, le floor et les murs
+g. afficher l’image dans la fenêtre
+h. nettoyer les ressources MLX à la fin
+
+Le core n’est pas responsable de :
+
+a. parser le fichier .cub
+b. retrouver la position du player dans la map
+c. modifier la map pour remplacer N/S/E/W
+d. lire les touches clavier directement
+e. gérer la logique des events
+
+Ces responsabilités appartiennent respectivement au parser et au module events.
+
+
+
+5. Architecture
+
+Fonctions attendues côté core (example):
+
+
+int		init_mlx(t_game *game);
+int		init_frame(t_game *game);
+int		init_textures(t_game *game);
+int		render_frame(t_game *game);
+void	destroy_mlx(t_game *game);
+
+
+Fonctions attendues côté raycasting (example) :
+
+void	cast_ray(t_game *game, int screen_x, t_ray *ray);
+void	draw_wall_column(t_game *game, int screen_x, t_ray *ray);
+
+
+Le nom exact peut changer, mais la séparation doit rester claire :
+
+
+init        => préparer MLX / window / frame / textures
+raycasting  => calculer ce que le player voit
+drawing     => écrire les pixels dans l’image
+render      => produire une frame complète
+destroy     => nettoyer proprement
+
+
+
+
+6. Une seule source pour MLX et la window
+
+La structure t_game doit être la source principale :
+
+
+game->mlx
+game->win
+game->frame
+game->tex[4]
+
+
+Éviter de dupliquer mlx et win dans plusieurs structures.
+
+Recommandé :
+
+typedef struct s_img
+{
+	void	*img;
+	int		*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		width;
+	int		height;
+}	t_img;
+
+
+t_img représente une image, pas une fenêtre.
+
+La fenêtre et le contexte MLX appartiennent à `t_game`.
+
+
+
+7. Toujours vérifier les retours MLX
+
+Les fonctions MLX peuvent échouer.
+
+Toujours vérifier :
+
+
+mlx_init()
+mlx_new_window()
+mlx_new_image()
+mlx_get_data_addr()
+mlx_xpm_file_to_image()
+
+
+Faut pas faire :
+
+game->mlx = mlx_init();
+game->win = mlx_new_window(...);
+
+
+
+8. Textures
+
+Le parser remplit déjà :
+
+game->config.tex_path[NORTH]
+game->config.tex_path[SOUTH]
+game->config.tex_path[WEST]
+game->config.tex_path[EAST]
+
+Le core doit charger ces textures avec MLX.
+
+
+
+9. Events et movement
+
+Le core ne doit pas gérer directement les touches.
+
+Le module events met à jour :
+
+
+game->keys.w
+game->keys.a
+game->keys.s
+game->keys.d
+game->keys.left
+game->keys.right
+
+
+Puis la loop appelle :
+
+update_player(game);
+render_frame(game);
+
+
+Le core doit seulement fournir une fonction propre :
+
+render_frame(game);
+
+
+Il ne doit pas décider comment le player se déplace
+
+
+
+
+Bonus prévus(si tu n'as pas le temps je peux m'en occupe) :
+
+a. wall collisions
+b. minimap
+c. doors
+d. animated sprites
+e. mouse rotation
+
+Conséquences :
+
+a. ne pas hardcoder uniquement les caractères 0 et 1 dans tout le core
+b. prévoir une fonction centralisée pour savoir si une case bloque le player
+c. prévoir une fonction centralisée pour savoir si un rayon touche un mur
+d. garder render_frame() extensible
+e. séparer le rendu 3D du rendu minimap
+
+
+Exemple de séparation utile :
+
+int	is_blocking_cell(t_game *game, int x, int y);
+int	is_walkable_cell(t_game *game, int x, int y);
+
+Pour mandatory, un mur est 1
+
+Pour bonus, une porte fermée pourra aussi être bloquante.
+
+
+
+
+Le core doit rester un moteur de rendu clair, pas un mélange de parser, events, player init et tests temporaires.
+
+Principe final :
+
+Parser prépare les données
+Events modifie l’état du player
+Engine lit l’état actuel et dessine une frame
+Cleanup libère tout proprement
