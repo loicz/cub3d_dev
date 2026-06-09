@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/09 17:51:29 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/09 18:08:17 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 			ray->mapY += ray->step.y;
 			side = 1;
 		}
+		if (ray->mapY < 0 || ray->mapY >= game->map.height)
+			return (-1);
+		if (ray->mapX < 0 || ray->mapX >= game->map.row_len[ray->mapY])
+			return (-1);
 		if (game->map.grid[ray->mapY][ray->mapX] == '1')
 			break ;
 	}
@@ -68,7 +72,6 @@ double	launch_ray(int nb, t_game *game, t_ray ray)
 	int		side;
 	double	perp_wall_dist;
 
-	perp_wall_dist = 0.1;
 	ray.mapX = (int)game->player.pos.x;
 	ray.mapY = (int)game->player.pos.y;
 	caméraX = 2 * nb / (double)WIN_W - 1;
