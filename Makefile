@@ -43,7 +43,8 @@ PARSER_FILES =	$(D_PARSE)parse_scene.c \
 EVENT_FILES =	$(D_EVENTS)hooks.c \
 				$(D_EVENTS)update.c \
 				$(D_EVENTS)move.c \
-				$(D_EVENTS)rotate.c
+				$(D_EVENTS)rotate.c \
+				$(D_EVENTS)expose.c
 
 BONUS_EVENT_FILES =	$(D_EVENTS)hooks_bonus.c \
 					$(D_EVENTS)update.c \

@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:14:55 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/10 22:18:30 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 01:04:03 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	setup_hooks(t_game *game)
 	mlx_hook(game->mlx.win, EV_KEYPRESS, M_KEYPRESS, on_key_press, game);
 	mlx_hook(game->mlx.win, EV_KEYRELEASE, M_KEYRELEASE, on_key_release, game);
 	mlx_hook(game->mlx.win, EV_DESTROY, 0, on_destroy, game);
+	mlx_expose_hook(game->mlx.win, on_expose, game);
 	mlx_loop_hook(game->mlx.ptr, game_loop, game);
 }
 
