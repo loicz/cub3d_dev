@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 00:35:51 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 00:51:31 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,22 @@ typedef struct s_vec
 //(tu peux modifier en stucture de donnees que tu preferes si tu veux)
 typedef struct s_img
 {
-	void	*img;
-	int		*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
+	void		*img;
+	int			*addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
+	int			width;
+	int			height;
+}				t_img;
 
 typedef struct s_mlx
 {
-	void	*ptr;
-	void	*win;
-	t_img	frame;
-	t_img	tex[4];
-}	t_mlx;
+	void		*ptr;
+	void		*win;
+	t_img		frame;
+	t_img		tex[4];
+}				t_mlx;
 
 /* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
    langage commun aux trois modules : parser, mlx, engine
@@ -185,7 +185,7 @@ typedef struct s_game
 	t_player	player;
 	t_ray		ray;
 	t_keys		keys;
-}	t_game;
+}				t_game;
 # include "./engine.h"
 
 // parsing
@@ -225,7 +225,7 @@ int		on_mouse_move(int x, int y, t_game *game);
 // utils
 int				err_msg(char *s);
 
-//clean_up
-void	destroy_mlx(t_game *game);
-int		on_destroy(t_game *game);
+// clean_up
+void			destroy_mlx(t_game *game);
+int				on_destroy(t_game *game);
 #endif
