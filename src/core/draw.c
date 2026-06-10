@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/09 17:26:16 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/10 00:42:02 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 	min_win.y = 0;
 
 	if(high_wall.y >= 0 && high_wall.y <= WIN_H / 2)
-		draw_vertical_line(min_win, high_wall, game->frame, game->config.ceil_color); //dessiner le ciel
+		draw_vertical_line(min_win, high_wall, game->mlx.frame, game->config.ceil_color); //dessiner le ciel
 	if(low_wall.y <= WIN_H && low_wall.y >= WIN_H / 2)
-		draw_vertical_line(low_wall, max_win, game->frame, game->config.floor_color); //dessiner le sol
-	draw_vertical_line(high_wall, low_wall, game->frame, 0xFFFF25FF); //dessiner le mur
+		draw_vertical_line(low_wall, max_win, game->mlx.frame, game->config.floor_color); //dessiner le sol
+	draw_vertical_line(high_wall, low_wall, game->mlx.frame, 0xFFFF25FF); //dessiner le mur
 }
