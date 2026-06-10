@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/09 18:25:47 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/10 12:08:42 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ typedef struct s_vec
 //(tu peux modifier en stucture de donnees que tu preferes si tu veux)
 typedef struct s_img
 {
-	void		*mlx;
 	void		*img;
-	void		*win;
 	int			*addr;
 	int			bpp;
 	int			line_len;
@@ -95,6 +93,14 @@ typedef struct s_img
 	int			width;
 	int			height;
 }				t_img;
+
+typedef struct s_mlx
+{
+	void		*ptr;
+	void		*win;
+	t_img		frame;
+	t_img		tex[4];
+}				t_mlx;
 
 /* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
    langage commun aux trois modules : parser, mlx, engine
@@ -167,8 +173,7 @@ typedef struct s_keys
    accede a tout le monde (player / map / frame / keys) */
 typedef struct s_game
 {
-	t_img		*frame;
-	t_img		tex[4];
+	t_mlx		mlx;
 	t_config	config;
 	t_map		map;
 	t_player	player;
@@ -197,4 +202,7 @@ int				is_map_closed(t_map *map);
 // utils
 int				err_msg(char *s);
 
+// clean_up
+void			destroy_mlx(t_game *game);
+int				on_destroy(t_game *game);
 #endif

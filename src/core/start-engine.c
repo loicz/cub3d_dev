@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/09 17:23:34 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/10 00:39:24 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,38 +32,51 @@ void	start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
-	mlx_put_image_to_window(game->frame.ptr, game->frame.win, game->frame.img,
+	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
 	0, 0);
 }
 
-void	initialise_mlx(t_img *img)
+int	init_mlx(t_game *game)
 {
-	img->height = WIN_H;
-	img->width = WIN_W;
-	img->ptr = mlx_init();
-	img->win = mlx_new_window(img->ptr, img->width, img->height, WIN_TITLE);
-	img->img = mlx_new_image(img->ptr, img->width, img->height);
-	img->addr = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
-			&img->endian);
-	img->line_len /= 4;
+	t_mlx	*mlx;
+ 
+	mlx = &game->mlx;
+	mlx->ptr = mlx_init();
+	if (!mlx->ptr)
+		return (err_msg("mlx: init failed"));
+	mlx->win = mlx_new_window(mlx->ptr, WIN_W, WIN_H, WIN_TITLE);
+	if (!mlx->win)
+		return (err_msg("mlx: window creation failed"));
+	mlx->frame.width = WIN_W;
+	mlx->frame.height = WIN_H;
+	mlx->frame.img = mlx_new_image(mlx->ptr, WIN_W, WIN_H);
+	if (!mlx->frame.img)
+		return (err_msg("mlx: image creation failed"));
+	mlx->frame.addr = (int *)mlx_get_data_addr(mlx->frame.img,
+			&mlx->frame.bpp, &mlx->frame.line_len, &mlx->frame.endian);
+	mlx->frame.line_len /= 4;
+	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	t_game game;
-
+	t_game	game;
+ 
 	if (ac != 2)
-	{
-		write(2, "Usage: ./parser_test <map.cub>\n", 31);
-		return (1);
-	}
+		return (err_msg("usage: ./cub3D <map.cub>"));
 	ft_bzero(&game, sizeof(t_game));
 	if (parse_scene(av[1], &game))
 		return (1);
-	initialise_mlx(&game.frame);
+	if (init_mlx(&game))
+	{
+		destroy_mlx(&game);
+		free_parser_data(&game);
+		return (1);
+	}
+	setup_hooks(&game); //je vais creer
 	start_engine(&game);
-	
-	mlx_loop(game.frame.ptr);
-	// free_parser_data(&game);
+	mlx_loop(game.mlx.ptr);
+	destroy_mlx(&game);
+	free_parser_data(&game);
 	return (0);
 }
