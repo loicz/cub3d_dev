@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 15:29:57 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 16:21:38 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 {
 	int	i;
 	int	text;
-	int	distance;
+	int	dist;
 	int	y;
 
 	if (high.x != low.x)
@@ -52,12 +52,11 @@ void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 	if (color == -1)
 		text = 1;
 	i = 0;
-	distance = (int)fabs(low.y - high.y);
-	while (i <= distance)
+	dist = (int)fabs(low.y - high.y);
+	while (i <= dist)
 	{
 		if (text == 1)
-			color = color_texture(game->mlx.tex[game->ray.tex], low.x, i,
-					distance);
+			color = color_texture(game->mlx.tex[game->ray.tex], low.x, i, dist);
 		if (low.x >= 0 && low.x < game->mlx.frame.width && y >= 0
 			&& y < game->mlx.frame.height)
 			game->mlx.frame.addr[get_index(low.x, y,
