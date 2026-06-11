@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/10 00:50:32 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 12:20:39 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ void	destroy_mlx(t_game *game)
 	mlx->ptr = NULL;
 }
 
-int	on_destroy(t_game *game)
+int	on_destroy(void *param)
 {
+	t_game	*game;
+
+	game = (t_game *)param;
 	mlx_loop_end(game->mlx.ptr);
 	return (0);
 }
