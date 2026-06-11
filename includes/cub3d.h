@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 11:50:44 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 12:02:02 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@
 # define EV_DESTROY 17
 # define M_KEYPRESS 1L
 # define M_KEYRELEASE 2L
+
+// MOUSE BONUS
+# define EV_MOUSEMOVE 6
+# define M_MOUSEMOVE 64L
+# define MOUSE_SENS 0.002
 
 // DATA TYPE
 
@@ -174,6 +179,7 @@ typedef struct s_keys
 	int			d;
 	int			left;
 	int			right;
+	int			mouse_dx;
 }				t_keys;
 
 /* ceete stucture est le contexte central
@@ -206,6 +212,24 @@ int				is_valid_char(char c);
 void			free_tmp_lines(t_line *tmp);
 void			free_parser_data(t_game *game);
 int				is_map_closed(t_map *map);
+
+// EVENTS
+void			setup_hooks(t_game *game);
+int				on_key_press(int keycode, t_game *game);
+int				on_key_release(int keycode, t_game *game);
+int				game_loop(t_game *game);
+int				update_player(t_game *game);
+int				move_player(t_game *game, double dx, double dy);
+int				can_stand_at(t_game *game, double x, double y);
+int				is_walkable(t_game *game, int x, int y);
+void			rotate_player(t_player *player, double angle);
+int				on_expose(void *param);
+
+// ENGINE ENTRY
+void			start_engine(t_game *game);
+
+void			setup_mouse_hook(t_game *game);
+int				on_mouse_move(int x, int y, t_game *game);
 
 // utils
 int				err_msg(char *s);

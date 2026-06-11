@@ -1,5 +1,5 @@
 #### VARIABLES ####
-NAME = cub3d
+NAME = cub3D
 TEST = parser_test
 LIBFT = ./libft/libft.a
 MLX = ./minilibx-linux/libmlx.a
@@ -18,6 +18,8 @@ D_PARSE = ./src/parsing/
 D_UTILS = ./src/utils/
 D_GNL = ./GNL/
 D_TEST = ./tests/
+D_EVENTS = ./src/events/
+D_BONUS = ./src_bonus/
 
 #### SOURCE ####
 ENGINE_FILES = $(D_ENGINE)start-engine.c \
@@ -38,11 +40,25 @@ PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_UTILS)utils.c \
 				$(D_GNL)get_next_line_utils.c
 
-SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES)
+EVENT_FILES =	$(D_EVENTS)hooks.c \
+				$(D_EVENTS)update.c \
+				$(D_EVENTS)move.c \
+				$(D_EVENTS)rotate.c \
+				$(D_EVENTS)expose.c
+
+BONUS_EVENT_FILES =	$(D_EVENTS)hooks_bonus.c \
+					$(D_EVENTS)update.c \
+					$(D_EVENTS)move.c \
+					$(D_EVENTS)rotate.c \
+					$(D_EVENTS)mouse_bonus.c
+
+SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(EVENT_FILES)
+BONUS_SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(BONUS_EVENT_FILES)
 
 TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
+BONUS_OBJ_FILES = $(BONUS_SRC_FILES:.c=.o)
 TEST_OBJ = $(TEST_FILES:.c=.o)
 # SUPP = --suppressions=$(PWD)/readline.supp
 # HEADER_PATH = include
@@ -76,13 +92,17 @@ ${MLX} :
 
 good: re clean
 
+bonus: $(LIBFT) $(MLX) $(BONUS_OBJ_FILES)
+	@$(CC) $(CFLAGS) $(BONUS_OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
+	@echo "$(NAME) bonus ✅"
+
 clean:
-	@rm -f ${OBJ_FILES} ${TEST_OBJ}
+	@rm -f ${OBJ_FILES} ${BONUS_OBJ_FILES} ${TEST_OBJ}
 	@$(MAKE) -C ./libft clean
 	@$(MAKE) -C ./minilibx-linux clean
 
 fclean: clean
-	@rm -f ${NAME} ${TEST}
+	@rm -f ${NAME} ${TEST} .bonus
 	@$(MAKE) -C ./libft fclean
 
 re: fclean all
@@ -96,4 +116,4 @@ parser: $(TEST)
 PRINT :
 	@echo $(NAME) ✅
 
-.PHONY: all clean fclean re good val parser val-parser PRINT
+.PHONY: all clean fclean re good val parser val-parser PRINT bonus
