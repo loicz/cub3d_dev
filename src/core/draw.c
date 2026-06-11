@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 11:59:06 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 12:12:37 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	color_texture(t_img img, int x, int i, int distance)
 	// printf("ratio%f\n", ratio);
 	y = ratio * img.height;
 	// printf("y%d\n", y);
+	printf("x:%d\n", x);
+	printf("img.width:%d\n", img.width);
 	color = img.addr[get_index(x % img.width, y, img.line_len)];
 	// if (x > 350 && x < 370)
 	// printf("index:%d x:%d\n", get_index(x % img.width, y, img.line_len), x
@@ -87,6 +89,7 @@ void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 	if (low_wall.y <= WIN_H && low_wall.y >= WIN_H / 2)
 		draw_vertical_line(game, low_wall, max_win, game->mlx.frame);
 	// dessiner le sol
+	printf("tex:%d\n", game->ray.tex);
 	draw_vertical_line(game, high_wall, low_wall, game->mlx.tex[game->ray.tex]);
 	// dessiner le mur
 }
