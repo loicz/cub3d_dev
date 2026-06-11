@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/10 18:39:01 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 11:55:07 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	start_engine(t_game *game)
 	i = 0;
 	while (i < WIN_W)
 	{
-		dist_ray = launch_ray(i, game, game->ray);
+		dist_ray = launch_ray(i, game, &game->ray);
 		high_wall.x = i;
 		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
 		low_wall.x = i;

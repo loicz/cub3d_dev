@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray.c                                              :+:      :+:    :+:   */
+/*   a.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/10 12:16:49 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 11:55:33 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,34 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 	}
 	return (side);
 }
-
-double	launch_ray(int nb, t_game *game, t_ray ray)
+void	calcul_nb_texture(t_game *game, t_ray *ray)
+{
+	if (ray->mapY < game->player.pos.y)
+		ray->tex = 0;
+	else
+		ray->tex = 1;
+}
+double	launch_ray(int nb, t_game *game, t_ray *ray)
 {
 	double	caméraX;
 	int		side;
 	double	perp_wall_dist;
 
-	ray.mapX = (int)game->player.pos.x;
-	ray.mapY = (int)game->player.pos.y;
+	ray->mapX = (int)game->player.pos.x;
+	ray->mapY = (int)game->player.pos.y;
 	caméraX = 2 * nb / (double)WIN_W - 1;
-	ray.rayDir.x = game->player.dir.x + game->player.plane.x * caméraX;
-	ray.rayDir.y = game->player.dir.y + game->player.plane.y * caméraX;
-	ray.deltaDist.x = fabs(1 / ray.rayDir.x);
-	ray.deltaDist.y = fabs(1 / ray.rayDir.y);
-	calcul_sidedist(game, &ray);
-	side = algorithme_dda(game, &ray);
+	ray->rayDir.x = game->player.dir.x + game->player.plane.x * caméraX;
+	ray->rayDir.y = game->player.dir.y + game->player.plane.y * caméraX;
+	ray->deltaDist.x = fabs(1 / ray->rayDir.x);
+	ray->deltaDist.y = fabs(1 / ray->rayDir.y);
+	calcul_sidedist(game, ray);
+	side = algorithme_dda(game, ray);
 	if (side == 0)
-		perp_wall_dist = (ray.mapX - game->player.pos.x + (1
-					- (double)ray.step.x) / 2) / ray.rayDir.x;
+		perp_wall_dist = (ray->mapX - game->player.pos.x + (1
+					- (double)ray->step.x) / 2) / ray->rayDir.x;
 	else
-		perp_wall_dist = (ray.mapY - game->player.pos.y + (1
-					- (double)ray.step.y) / 2) / ray.rayDir.y;
+		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
+					- (double)ray->step.y) / 2) / ray->rayDir.y;
+	calcul_nb_texture(game, ray);
 	return (perp_wall_dist);
 }
