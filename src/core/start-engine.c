@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 12:16:56 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 12:21:19 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,8 @@ int	init_mlx(t_game *game)
 	mlx->frame.addr = (int *)mlx_get_data_addr(mlx->frame.img, &mlx->frame.bpp,
 			&mlx->frame.line_len, &mlx->frame.endian);
 	mlx->frame.line_len /= 4;
-	while (i < 2)
+	while (i < 4)
 	{
-		// printf("path texture:%s\n", game->config.tex_path[i]);
 		load_texture(game, &game->mlx.tex[i], i);
 		i++;
 	}
@@ -91,7 +90,7 @@ int	main(int ac, char **av)
 		free_parser_data(&game);
 		return (1);
 	}
-	setup_hooks(&game);
+	// setup_hooks(&game);
 	start_engine(&game);
 	// mlx_put_image_to_window(game.mlx.ptr, game.mlx.win, game.mlx.tex[0].img,
 	// 200, 0);

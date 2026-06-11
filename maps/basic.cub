@@ -1,7 +1,7 @@
 NO ./textures/wall_cartoon.xpm
-SO ./textures/bricks.xpm
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+SO ./textures/bricks-white.xpm
+WE ./textures/ruins.xpm
+EA ./textures/bricks-dark.xpm
 
 F 220,100,0
 C 225,30,0
