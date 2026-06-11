@@ -65,12 +65,26 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 	}
 	return (side);
 }
-void	calcul_nb_texture(t_game *game, t_ray *ray)
+void	calcul_nb_texture(t_game *game, t_ray *ray, int side)
 {
 	if (ray->mapY < game->player.pos.y)
-		ray->tex = 0;
+	{
+		if (side == 1)
+			ray->tex = 0;
+		else if (ray->rayDir.x < 0)
+			ray->tex = 2;
+		else
+			ray->tex = 3;
+	}
 	else
-		ray->tex = 1;
+	{
+		if (side == 1)
+			ray->tex = 1;
+		else if (ray->rayDir.x < 0)
+			ray->tex = 2;
+		else
+			ray->tex = 3;
+	}
 }
 double	launch_ray(int nb, t_game *game, t_ray *ray)
 {
@@ -93,6 +107,6 @@ double	launch_ray(int nb, t_game *game, t_ray *ray)
 	else
 		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
 					- (double)ray->step.y) / 2) / ray->rayDir.y;
-	calcul_nb_texture(game, ray);
+	calcul_nb_texture(game, ray, side);
 	return (perp_wall_dist);
 }

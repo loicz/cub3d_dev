@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:14:55 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 01:04:03 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 14:40:35 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+/*
 static void	set_key_state(int keycode, t_game *game, int state)
 {
 	if (keycode == KEY_W)
@@ -50,3 +51,4 @@ int	on_key_release(int keycode, t_game *game)
 	set_key_state(keycode, game, 0);
 	return (0);
 }
+ */
