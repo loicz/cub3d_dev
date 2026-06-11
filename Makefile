@@ -64,7 +64,7 @@ TEST_OBJ = $(TEST_FILES:.c=.o)
 # HEADER_PATH = include
 CC= cc
 # CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
-CFLAGS=-Wall -Wextra -Werror -g3
+CFLAGS=-Wall -Wextra -Werror -g3 -std=gnu99
 # OBJ=ft_*.c =.o
 # SRCS = $(HEADER_PATH)ft_atoi
 
