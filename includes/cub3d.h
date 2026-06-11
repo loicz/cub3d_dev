@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 12:29:52 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 17:47:03 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 // servir a : module events
 // senario : mettre a jour le player
 // ces valeur seront modifies par evaluateurs au moment de correction
-# define MOVE_SPEED 0.045
-# define ROT_SPEED 0.035
+# define MOVE_SPEED 0.075
+# define ROT_SPEED 0.070
 // collision: la distance securise minimale entre le player et le mur
 # define PLAYER_RADIUS 0.20
 // longuer du plan camera(la plus part de gens
@@ -122,6 +122,12 @@ typedef enum e_dir
 // informations player
 // dir : l'orientation de player
 // plane : longueur du plan camera
+typedef struct s_draw
+{
+	t_vec		high;
+	t_vec		low;
+}				t_draw;
+
 typedef struct s_player
 {
 	t_vec		pos;
@@ -137,6 +143,7 @@ typedef struct s_ray
 	t_vec		step;
 	int			mapX;
 	int			mapY;
+	int			tex;
 }				t_ray;
 // map
 /* grid    : tableau de lignes, acces case par grid[y][x]
@@ -184,6 +191,7 @@ typedef struct s_game
 	t_map		map;
 	t_player	player;
 	t_ray		ray;
+	t_draw		draw;
 	t_keys		keys;
 }				t_game;
 # include "./engine.h"
@@ -206,22 +214,22 @@ void			free_parser_data(t_game *game);
 int				is_map_closed(t_map *map);
 
 // EVENTS
-void	setup_hooks(t_game *game);
-int		on_key_press(int keycode, void *param);
-int		on_key_release(int keycode, void *param);
-int		game_loop(void *param);
-int		update_player(t_game *game);
-int		move_player(t_game *game, double dx, double dy);
-int		can_stand_at(t_game *game, double x, double y);
-int		is_walkable(t_game *game, int x, int y);
-void	rotate_player(t_player *player, double angle);
-int		on_expose(void *param);
+void			setup_hooks(t_game *game);
+int				on_key_press(int keycode, void *param);
+int				on_key_release(int keycode, void *param);
+int				game_loop(void *param);
+int				update_player(t_game *game);
+int				move_player(t_game *game, double dx, double dy);
+int				can_stand_at(t_game *game, double x, double y);
+int				is_walkable(t_game *game, int x, int y);
+void			rotate_player(t_player *player, double angle);
+int				on_expose(void *param);
 
 // ENGINE ENTRY
-void	start_engine(t_game *game);
+void			start_engine(t_game *game);
 
-void	setup_mouse_hook(t_game *game);
-int		on_mouse_move(int x, int y, void *param);
+void			setup_mouse_hook(t_game *game);
+int				on_mouse_move(int x, int y, void *param);
 
 // utils
 int				err_msg(char *s);
