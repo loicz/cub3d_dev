@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 17:47:03 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 18:56:22 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 // servir a : module events
 // senario : mettre a jour le player
 // ces valeur seront modifies par evaluateurs au moment de correction
-# define MOVE_SPEED 0.075
-# define ROT_SPEED 0.070
+# define MOVE_SPEED 0.045
+# define ROT_SPEED 0.035
 // collision: la distance securise minimale entre le player et le mur
 # define PLAYER_RADIUS 0.20
 // longuer du plan camera(la plus part de gens

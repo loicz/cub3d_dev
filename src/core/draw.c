@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 16:21:38 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 18:29:37 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	color_texture(t_img img, int x, int i, int distance)
 	// printf("distance%d\n", distance);
 	// printf("ratio%f\n", ratio);
 	y = ratio * img.height;
-	// printf("y%d\n", y);
 	// printf("x:%d\n", x);
 	// printf("img.width:%d\n", img.width);
 	color = img.addr[get_index(x % img.width, y, img.line_len)];
 	// % img.width);
 	// if (x == 0)
 	// printf("index0:%d\n", get_index(x, y, img.line_len));
+	// printf("y%d\n", y);
 	// printf("color%d\n", color);
 	return (color);
 }
