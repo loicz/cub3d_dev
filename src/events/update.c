@@ -6,7 +6,7 @@
 /*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 00:45:09 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 12:19:50 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ int	update_player(t_game *game)
 	return (move_player(game, dx, dy));
 }
 
-int	game_loop(t_game *game)
+int	game_loop(void *param)
 {
 	double	angle;
 	int		changed;
+	t_game	*game;
 
+	game = (t_game *)param;
 	angle = 0;
 	changed = 0;
 	if (game->keys.left)

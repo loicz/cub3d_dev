@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 12:02:02 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 17:39:11 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,9 +215,9 @@ int				is_map_closed(t_map *map);
 
 // EVENTS
 void			setup_hooks(t_game *game);
-int				on_key_press(int keycode, t_game *game);
-int				on_key_release(int keycode, t_game *game);
-int				game_loop(t_game *game);
+int				on_key_press(int keycode, void *param);
+int				on_key_release(int keycode, void *param);
+int				game_loop(void *param);
 int				update_player(t_game *game);
 int				move_player(t_game *game, double dx, double dy);
 int				can_stand_at(t_game *game, double x, double y);
@@ -229,12 +229,12 @@ int				on_expose(void *param);
 void			start_engine(t_game *game);
 
 void			setup_mouse_hook(t_game *game);
-int				on_mouse_move(int x, int y, t_game *game);
+int				on_mouse_move(int x, int y, void *param);
 
 // utils
 int				err_msg(char *s);
 
 // clean_up
 void			destroy_mlx(t_game *game);
-int				on_destroy(t_game *game);
+int				on_destroy(void *param);
 #endif

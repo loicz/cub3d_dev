@@ -6,13 +6,12 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:14:55 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 14:40:35 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 17:39:24 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
 static void	set_key_state(int keycode, t_game *game, int state)
 {
 	if (keycode == KEY_W)
@@ -38,17 +37,22 @@ void	setup_hooks(t_game *game)
 	mlx_loop_hook(game->mlx.ptr, game_loop, game);
 }
 
-int	on_key_press(int keycode, t_game *game)
+int	on_key_press(int keycode, void *param)
 {
+	t_game	*game;
+
+	game = (t_game *)param;
 	if (keycode == KEY_ESC)
 		return (on_destroy(game));
 	set_key_state(keycode, game, 1);
 	return (0);
 }
 
-int	on_key_release(int keycode, t_game *game)
+int	on_key_release(int keycode, void *param)
 {
+	t_game	*game;
+
+	game = (t_game *)param;
 	set_key_state(keycode, game, 0);
 	return (0);
 }
- */
