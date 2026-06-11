@@ -9,6 +9,7 @@ MLX = ./minilibx-linux/libmlx.a
 VAL = valgrind
 LEAKS = -s --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes
 HEADER_PATH = includes
+SUPP = --suppressions=mlx.supp
 CC= cc
 INC = -I $(HEADER_PATH) -I ./libft -I ./minilibx-linux -IGNL
 # OBJ=ft_*.c =.o
@@ -108,7 +109,7 @@ fclean: clean
 re: fclean all
 
 val : ${NAME}
-	@$(VAL) $(LEAKS) ./$(NAME)
+	@$(VAL) $(LEAKS) $(SUPP) ./$(NAME) ./maps/basic.cub
 
 parser: $(TEST)
 	@echo "$(TEST) ✅"

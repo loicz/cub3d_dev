@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 14:49:57 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/11 15:02:20 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ int	main(int ac, char **av)
 	}
 	// setup_hooks(&game);
 	start_engine(&game);
-	// mlx_put_image_to_window(game.mlx.ptr, game.mlx.win, game.mlx.tex[0].img,
-	// 200, 0);
 	mlx_loop(game.mlx.ptr);
 	destroy_mlx(&game);
 	free_parser_data(&game);

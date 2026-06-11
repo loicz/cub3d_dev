@@ -1,0 +1,21 @@
+{
+   mlx_leaks_ignore
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,possible,indirect
+   ...
+   obj:*/libmlx.a*
+}
+{
+   mlx_x11_leaks_ignore
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,possible,indirect
+   ...
+   obj:*/libX11.so*
+}
+{
+   mlx_ext_leaks_ignore
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,possible,indirect
+   ...
+   obj:*/libXext.so*
+}

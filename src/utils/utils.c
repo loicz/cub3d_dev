@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/10 00:50:32 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/11 15:00:01 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ void	destroy_mlx(t_game *game)
 	mlx = &game->mlx;
 	if (!mlx->ptr)
 		return ;
+	destroy_textures(mlx);
+	destroy_img(mlx, &mlx->frame);
 	if (mlx->win)
 	{
 		mlx_destroy_window(mlx->ptr, mlx->win);
 		mlx->win = NULL;
 	}
-	destroy_textures(mlx);
-	destroy_img(mlx, &mlx->frame);
 	mlx_destroy_display(mlx->ptr);
 	free(mlx->ptr);
 	mlx->ptr = NULL;
