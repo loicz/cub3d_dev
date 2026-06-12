@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 18:56:22 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/12 15:40:42 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,6 @@ typedef enum e_dir
 // informations player
 // dir : l'orientation de player
 // plane : longueur du plan camera
-typedef struct s_draw
-{
-	t_vec		high;
-	t_vec		low;
-}				t_draw;
 
 typedef struct s_player
 {
@@ -143,7 +138,10 @@ typedef struct s_ray
 	t_vec		step;
 	int			mapX;
 	int			mapY;
+	double		wallX;
 	int			tex;
+	int			texX;
+	int			tile;
 }				t_ray;
 // map
 /* grid    : tableau de lignes, acces case par grid[y][x]
@@ -191,7 +189,6 @@ typedef struct s_game
 	t_map		map;
 	t_player	player;
 	t_ray		ray;
-	t_draw		draw;
 	t_keys		keys;
 }				t_game;
 # include "./engine.h"

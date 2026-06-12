@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 18:29:37 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/12 17:09:02 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,12 @@ int	color_texture(t_img img, int x, int i, int distance)
 	// printf("distance%d\n", distance);
 	// printf("ratio%f\n", ratio);
 	y = ratio * img.height;
-	// printf("x:%d\n", x);
-	// printf("img.width:%d\n", img.width);
-	color = img.addr[get_index(x % img.width, y, img.line_len)];
+	// printf("x:%f\n", x);
+	// printf("wallX:%f\n", wallX);
+	// printf("x %d\n", x);
+	// printf("img.width %d\n", img.width);
+	// printf("real texX:%d\n", x);
+	color = img.addr[get_index(x, y, img.line_len)];
 	// % img.width);
 	// if (x == 0)
 	// printf("index0:%d\n", get_index(x, y, img.line_len));
@@ -56,13 +59,21 @@ void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 	while (i <= dist)
 	{
 		if (text == 1)
-			color = color_texture(game->mlx.tex[game->ray.tex], low.x, i, dist);
+			color = color_texture(game->mlx.tex[game->ray.tex], game->ray.texX,
+					i, dist);
 		if (low.x >= 0 && low.x < game->mlx.frame.width && y >= 0
 			&& y < game->mlx.frame.height)
 			game->mlx.frame.addr[get_index(low.x, y,
 					game->mlx.frame.line_len)] = color;
 		y++;
 		i++;
+	}
+	if (text == 1)
+	{
+		// 	game->ray.wallX -= floor(game->ray.wallX);
+		// 	printf("x %f\n", game->ray.wallX
+		// * game->mlx.tex[game->ray.tex].width);
+		// 	// printf("img.width %d\n", game->mlx.tex[game->ray.tex].width);
 	}
 }
 

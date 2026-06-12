@@ -65,7 +65,8 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 	}
 	return (side);
 }
-void	calcul_nb_texture(t_game *game, t_ray *ray, int side)
+void	calcul_nb_texture(t_game *game, t_ray *ray, int side,
+		double perpWallDist)
 {
 	if (ray->mapY < game->player.pos.y)
 	{
@@ -85,6 +86,17 @@ void	calcul_nb_texture(t_game *game, t_ray *ray, int side)
 		else
 			ray->tex = 3;
 	}
+	if (side == 0)
+		ray->wallX = game->player.pos.y + perpWallDist * ray->rayDir.y;
+	else
+		ray->wallX = game->player.pos.x + perpWallDist * ray->rayDir.x;
+	ray->wallX -= floor(ray->wallX);
+	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
+	// if (side == 0 && ray->rayDir.x > 0)
+	// 	ray->texX = game->mlx.tex[ray->tex].width - ray->texX - 1;
+	// if (side == 1 && ray->rayDir.y < 0)
+	// 	ray->texX = game->mlx.tex[ray->tex].width - ray->texX - 1;
+	printf("base texX:%d\n", ray->texX);
 }
 double	launch_ray(int nb, t_game *game, t_ray *ray)
 {
@@ -107,6 +119,6 @@ double	launch_ray(int nb, t_game *game, t_ray *ray)
 	else
 		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
 					- (double)ray->step.y) / 2) / ray->rayDir.y;
-	calcul_nb_texture(game, ray, side);
+	calcul_nb_texture(game, ray, side, perp_wall_dist);
 	return (perp_wall_dist);
 }
