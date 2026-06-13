@@ -96,7 +96,6 @@ void	calcul_nb_texture(t_game *game, t_ray *ray, int side,
 	// 	ray->texX = game->mlx.tex[ray->tex].width - ray->texX - 1;
 	// if (side == 1 && ray->rayDir.y < 0)
 	// 	ray->texX = game->mlx.tex[ray->tex].width - ray->texX - 1;
-	printf("base texX:%d\n", ray->texX);
 }
 double	launch_ray(int nb, t_game *game, t_ray *ray)
 {

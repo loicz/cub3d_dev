@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/12 15:40:42 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 14:43:34 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_mlx
 	void		*win;
 	t_img		frame;
 	t_img		tex[4];
+	t_img		mini_map;
 }				t_mlx;
 
 /* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
@@ -141,7 +142,6 @@ typedef struct s_ray
 	double		wallX;
 	int			tex;
 	int			texX;
-	int			tile;
 }				t_ray;
 // map
 /* grid    : tableau de lignes, acces case par grid[y][x]

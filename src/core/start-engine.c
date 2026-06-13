@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/12 15:22:31 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 11:01:06 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ void	start_engine(t_game *game)
 	t_vec	low_wall;
 
 	i = 0;
-	if (WIN_W > WIN_H)
-		game->ray.tile = WIN_W / game->map.width;
-	else
-		game->ray.tile = WIN_H / game->map.width;
 	while (i < WIN_W)
 	{
 		dist_ray = launch_ray(i, game, &game->ray);
@@ -31,7 +27,6 @@ void	start_engine(t_game *game)
 		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
 		low_wall.x = i;
 		low_wall.y = WIN_H / 2 + ((1 / dist_ray * WIN_H / 2));
-		game->ray.wallX = game->ray.tile * dist_ray;
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}

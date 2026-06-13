@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/12 17:09:02 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 11:30:52 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,8 @@ int	color_texture(t_img img, int x, int i, int distance)
 	int		y;
 
 	ratio = (double)i / (double)distance;
-	// printf("x%d\n", x);
-	// printf("distance%d\n", distance);
-	// printf("ratio%f\n", ratio);
 	y = ratio * img.height;
-	// printf("x:%f\n", x);
-	// printf("wallX:%f\n", wallX);
-	// printf("x %d\n", x);
-	// printf("img.width %d\n", img.width);
-	// printf("real texX:%d\n", x);
 	color = img.addr[get_index(x, y, img.line_len)];
-	// % img.width);
-	// if (x == 0)
-	// printf("index0:%d\n", get_index(x, y, img.line_len));
-	// printf("y%d\n", y);
-	// printf("color%d\n", color);
 	return (color);
 }
 void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
