@@ -47,11 +47,12 @@ EVENT_FILES =	$(D_EVENTS)hooks.c \
 				$(D_EVENTS)rotate.c \
 				$(D_EVENTS)expose.c
 
-BONUS_EVENT_FILES =	$(D_EVENTS)hooks_bonus.c \
+BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
 					$(D_EVENTS)update.c \
 					$(D_EVENTS)move.c \
 					$(D_EVENTS)rotate.c \
-					$(D_EVENTS)mouse_bonus.c
+					$(D_EVENTS)expose.c \
+					$(D_BONUS)mouse_bonus.c
 
 SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(EVENT_FILES)
 BONUS_SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(BONUS_EVENT_FILES)
