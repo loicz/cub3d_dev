@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/13 14:43:01 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 15:40:42 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,63 +56,64 @@ void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 		i++;
 	}
 }
-void	draw_cub(t_game *game, int y, int side, int color)
+void	draw_cub(t_game *game, int y, int x, int color)
 {
 	int		i;
 	t_vec	max_win;
 	t_vec	min_win;
 
-	min_win.y = y * side / 5;
-	max_win.y = (y + 1) * side / 5;
+	min_win.y = y * game->mini_map.width / minimap_W;
+	max_win.y = (y + 1) * game->mini_map.width / minimap_W;
 	i = 0;
-	while (i < side / 5)
+	while (i < game->mini_map.width / minimap_W)
 	{
-		max_win.x = i + side / 5;
-		min_win.x = i + side / 5;
-		printf("x:%f\n", min_win.x);
-		printf("x:%f\n", min_win.x);
+		max_win.x = i + ((x * game->mini_map.width) / minimap_W);
+		min_win.x = i + ((x * game->mini_map.width) / minimap_W);
+		// printf("x:%f\n", x);
+		// printf("x:%f\n", min_win.x);
 		draw_vertical_line(game, min_win, max_win, color);
 		i++;
 		// printf("enter\n");
 	}
 	// printf("\n\n\n\n");
-	// printf("side/5:%d\n", side / 5);
+	// printf("game->mini_map.width/minimap_W:%d\n", game->mini_map.width
+	// / minimap_W);
 	// printf("i:%d\n", i);
 }
-void	mini_map(t_game *game, int side)
+void	mini_map(t_game *game, t_minimap m, t_player play)
 {
-	int	X;
 	int	startX;
-	int	Y;
 	int	Ydraw;
 	int	Xdraw;
 	int	i;
 
-	X = (int)game->player.pos.x - 2;
-	Y = (int)game->player.pos.y - 2;
-	startX = X;
-	while (Y - ((int)game->player.pos.y - 2) < 5)
+	m.mapX = (int)play.pos.x - (int)(minimap_W / 2);
+	m.mapY = (int)play.pos.y - (int)(minimap_W / 2);
+	// printf("(int)(minimap_W / 2):%d\n", (int)(minimap_W / 2));
+	startX = m.mapX;
+	while (m.mapY - ((int)play.pos.y - (int)(minimap_W / 2)) < minimap_W)
 	{
-		X = startX;
+		m.mapX = startX;
 		i = 0;
-		Ydraw = Y - ((int)game->player.pos.y - 2);
-		Xdraw = X - ((int)game->player.pos.x - 2) + 1;
-		while (i < 5)
+		Ydraw = m.mapY - ((int)play.pos.y - (int)(minimap_W / 2));
+		Xdraw = m.mapX - ((int)play.pos.x - (int)(minimap_W / 2));
+		while (i < minimap_W)
 		{
-			// if (X == (int)game->player.pos.x && Y == (int)game->player.pos.y)
-			// draw_cub(game,Ydraw, side, 0xFF0000);
-			if (game->map.grid[Y][X] == '0')
-			{
-				printf("enter\n");
-				printf("Ydraw:%d\n", Ydraw);
-				draw_cub(game, Ydraw, Xdraw * side, 0x000000);
-			}
-			else if (game->map.grid[Y][X] == '1')
-				draw_cub(game, Ydraw, Xdraw * side, 0x0010FF);
+			if (m.mapY >= game->map.height
+				|| m.mapX >= game->map.row_len[m.mapY])
+				m.mapX = m.mapX;
+			else if (m.mapX == (int)play.pos.x && m.mapY == (int)play.pos.y)
+				draw_cub(game, Ydraw, Xdraw, 0xFF0000);
+			else if (game->map.grid[m.mapY][m.mapX] == '0')
+				draw_cub(game, Ydraw, Xdraw, 0x000000);
+			else if (game->map.grid[m.mapY][m.mapX] == '1')
+				draw_cub(game, Ydraw, Xdraw, 0x0010FF);
+			// printf("xdraw:%d\n", Xdraw);
 			i++;
 			Xdraw++;
+			m.mapX++;
 		}
-		Y++;
+		m.mapY++;
 	}
 }
 void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)

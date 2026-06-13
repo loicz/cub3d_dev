@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/13 10:55:41 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 14:47:39 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	destroy_mlx(t_game *game)
 		return ;
 	destroy_textures(mlx);
 	destroy_img(mlx, &mlx->frame);
-	destroy_img(mlx, &mlx->mini_map);
 	if (mlx->win)
 	{
 		mlx_destroy_window(mlx->ptr, mlx->win);

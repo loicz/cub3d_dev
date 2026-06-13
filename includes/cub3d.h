@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/13 14:43:34 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/13 15:32:44 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # define WIN_W 1280
 # define WIN_H 720
 # define WIN_TITLE "cub3D"
+
+// MINI_MAP
+# define minimap_W 5
 
 // MOVEMENT
 // servir a : module events
@@ -105,7 +108,6 @@ typedef struct s_mlx
 	void		*win;
 	t_img		frame;
 	t_img		tex[4];
-	t_img		mini_map;
 }				t_mlx;
 
 /* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
@@ -156,6 +158,13 @@ typedef struct s_map
 	int			width;
 }				t_map;
 
+typedef struct s_mini_map
+{
+	int			width;
+	int			mapX;
+	int			mapY;
+}				t_minimap;
+
 // configuration pour .cub
 // contenir 4 path de texture et le couleur du plafond et le sol
 // has_floor et has_ceil pour differencier le couleur noir {0,0,0} et "non set""
@@ -188,6 +197,7 @@ typedef struct s_game
 	t_config	config;
 	t_map		map;
 	t_player	player;
+	t_minimap	mini_map;
 	t_ray		ray;
 	t_keys		keys;
 }				t_game;
