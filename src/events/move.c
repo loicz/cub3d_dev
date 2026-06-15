@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:39:20 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/10 23:13:16 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/15 10:05:33 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_walkable(t_game *game, int x, int y)
 	if (x < 0 || x >= game->map.row_len[y])
 		return (1);
 	cell = game->map.grid[y][x];
-	if (cell == '1' || cell == ' ')
+	if (cell == '1' || cell == ' ' || cell == '2')
 		return (1);
 	return (0);
 }
