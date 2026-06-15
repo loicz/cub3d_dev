@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/13 15:32:44 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:28:42 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 # define KEY_A 97
 # define KEY_S 115
 # define KEY_D 100
+# define KEY_F 102
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 
