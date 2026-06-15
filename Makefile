@@ -29,7 +29,7 @@ ENGINE_FILES = $(D_ENGINE)start-engine.c \
 
 BONUS_ENGINE_FILES = $(D_ENGINE)start-engine_bonus.c \
 		$(D_ENGINE)draw_bonus.c \
-		$(D_ENGINE)ray.c \
+		$(D_ENGINE)ray_bonus.c \
 
 PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_PARSE)read_scene.c \
@@ -59,7 +59,7 @@ BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
 					$(D_BONUS)mouse_bonus.c
 
 SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(EVENT_FILES)
-BONUS_SRC_FILES = $(BONUS_ENGINE_FILES) $(PARSER_FILES) $(BONUS_EVENT_FILES)
+BONUS_SRC_FILES = $(BONUS_ENGINE_FILES) $(PARSER_FILES) $(D_PARSE)map_check_utils_bonus.c $(BONUS_EVENT_FILES)
 
 TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
 

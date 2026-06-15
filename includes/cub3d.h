@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/15 16:28:42 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:37:20 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ typedef struct s_mlx
 	void		*ptr;
 	void		*win;
 	t_img		frame;
-	t_img		tex[4];
+	t_img		tex[7];
 }				t_mlx;
 
 /* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
@@ -171,7 +171,7 @@ typedef struct s_mini_map
 // has_floor et has_ceil pour differencier le couleur noir {0,0,0} et "non set""
 typedef struct s_config
 {
-	char		*tex_path[4];
+	char		*tex_path[7];
 	int			floor_color;
 	int			ceil_color;
 	int			has_floor;

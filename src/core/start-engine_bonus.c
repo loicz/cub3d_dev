@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/13 15:31:30 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:57:08 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,18 @@ int	load_texture(t_game *game, t_img *tex, int i)
 	tex->line_len /= 4;
 	return (0);
 }
-int	init_mlx(t_game *game)
+void	fill_path_door(t_config *config)
 {
-	t_mlx	*mlx;
-	int		i;
+	config->tex_path[4] = "./textures/doors-close.xpm";
+	config->tex_path[5] = "./textures/doors-left.xpm";
+	config->tex_path[6] = "./textures/doors-right.xpm";
+}
+
+int	init_mlx(t_game *game, t_mlx *mlx)
+{
+	int	i;
 
 	i = 0;
-	mlx = &game->mlx;
 	mlx->ptr = mlx_init();
 	if (!mlx->ptr)
 		return (err_msg("mlx: init failed"));
@@ -73,7 +78,8 @@ int	init_mlx(t_game *game)
 	mlx->frame.addr = (int *)mlx_get_data_addr(mlx->frame.img, &mlx->frame.bpp,
 			&mlx->frame.line_len, &mlx->frame.endian);
 	mlx->frame.line_len /= 4;
-	while (i < 4)
+	fill_path_door(&game->config);
+	while (i < 7)
 	{
 		load_texture(game, &game->mlx.tex[i], i);
 		i++;
@@ -89,7 +95,7 @@ int	main(int ac, char **av)
 	ft_bzero(&game, sizeof(t_game));
 	if (parse_scene(av[1], &game))
 		return (1);
-	if (init_mlx(&game))
+	if (init_mlx(&game, &game.mlx))
 	{
 		destroy_mlx(&game);
 		free_parser_data(&game);

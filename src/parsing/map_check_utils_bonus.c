@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 17:57:56 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/15 17:03:19 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:59:53 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	is_player_char(char c)
 
 int	is_valid_char(char c)
 {
-	return (c == ' ' || c == '1' || c == '0' || is_player_char(c));
+	return (c == ' ' || c == '1' || c == '0' || c == '2' || c == '3'
+		|| is_player_char(c));
 }
 
 static char	get_cell(t_map *map, int x, int y)
