@@ -56,6 +56,7 @@ BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
 					$(D_EVENTS)move.c \
 					$(D_EVENTS)rotate.c \
 					$(D_EVENTS)expose.c \
+					$(D_BONUS)door_bonus.c \
 					$(D_BONUS)mouse_bonus.c
 
 SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(D_PARSE)map_check_utils.c $(EVENT_FILES)

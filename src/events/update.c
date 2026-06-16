@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/11 12:19:50 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/16 18:41:50 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	game_loop(void *param)
 		rotate_player(&game->player, angle);
 		changed = 1;
 	}
+	if (game->keys.left)
+		changed = door_open(game);
 	if (update_player(game))
 		changed = 1;
 	if (changed)
