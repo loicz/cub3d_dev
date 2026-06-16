@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/16 18:43:33 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/16 23:21:19 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ int				can_stand_at(t_game *game, double x, double y);
 int				is_walkable(t_game *game, int x, int y);
 void			rotate_player(t_player *player, double angle);
 int				on_expose(void *param);
-int				door_open(t_game *game);
+int				door_open(t_game *game, t_ray ray);
 
 // ENGINE ENTRY
 void			start_engine(t_game *game);

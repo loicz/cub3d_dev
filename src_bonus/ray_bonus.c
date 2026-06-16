@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "cub3d.h"
 
 void	calcul_sidedist(t_game *game, t_ray *ray)
 {
@@ -66,43 +66,27 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 	}
 	return (side);
 }
-void	calcul_nb_texture(t_game *game, t_ray *ray, int side,
-		double perpWallDist)
+void	calcul_nb_texture(t_game *game, t_ray *ray, int side)
 {
 	if (game->map.grid[ray->mapY][ray->mapX] == '2')
 		ray->tex = 4;
-	else if (game->map.grid[ray->mapY][ray->mapX - 1] == '3' || (ray->mapY >= 1
-			&& game->map.grid[ray->mapY - 1][ray->mapX] == '3'))
-		ray->tex = 6;
-	else if (((ray->mapX + 1) < game->map.row_len[ray->mapY]
-			&& game->map.grid[ray->mapY][ray->mapX + 1] == '3') || ((ray->mapY
-				+ 1) < game->map.height && game->map.grid[ray->mapY
-			+ 1][ray->mapX] == '3'))
+	else if (side == 0 && ((ray->mapX - 1 >= 0
+				&& game->map.grid[ray->mapY][ray->mapX - 1] == '3')
+			|| ((ray->mapX + 1) < game->map.row_len[ray->mapY]
+				&& game->map.grid[ray->mapY][ray->mapX + 1] == '3')))
 		ray->tex = 5;
-	else if (ray->mapY < game->player.pos.y)
-	{
-		if (side == 1)
-			ray->tex = 0;
-		else if (ray->rayDir.x < 0)
-			ray->tex = 2;
-		else
-			ray->tex = 3;
-	}
+	else if (side == 1 && ((ray->mapY - 1 >= 0 && game->map.grid[ray->mapY
+				- 1][ray->mapX] == '3') || ((ray->mapY + 1) < game->map.height
+				&& game->map.grid[ray->mapY + 1][ray->mapX] == '3')))
+		ray->tex = 5;
+	else if (side == 1 && ray->mapY < game->player.pos.y)
+		ray->tex = 0;
+	else if (side == 1)
+		ray->tex = 1;
+	else if (ray->rayDir.x < 0)
+		ray->tex = 2;
 	else
-	{
-		if (side == 1)
-			ray->tex = 1;
-		else if (ray->rayDir.x < 0)
-			ray->tex = 2;
-		else
-			ray->tex = 3;
-	}
-	if (side == 0)
-		ray->wallX = game->player.pos.y + perpWallDist * ray->rayDir.y;
-	else
-		ray->wallX = game->player.pos.x + perpWallDist * ray->rayDir.x;
-	ray->wallX -= floor(ray->wallX);
-	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
+		ray->tex = 3;
 }
 double	launch_ray(int nb, t_game *game, t_ray *ray)
 {
@@ -125,6 +109,12 @@ double	launch_ray(int nb, t_game *game, t_ray *ray)
 	else
 		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
 					- (double)ray->step.y) / 2) / ray->rayDir.y;
-	calcul_nb_texture(game, ray, side, perp_wall_dist);
+	if (side == 0)
+		ray->wallX = game->player.pos.y + perp_wall_dist * ray->rayDir.y;
+	else
+		ray->wallX = game->player.pos.x + perp_wall_dist * ray->rayDir.x;
+	ray->wallX -= floor(ray->wallX);
+	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
+	calcul_nb_texture(game, ray, side);
 	return (perp_wall_dist);
 }

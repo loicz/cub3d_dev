@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/17 00:12:12 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/16 23:20:55 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	game_loop(void *param)
 		rotate_player(&game->player, angle);
 		changed = 1;
 	}
+	if (game->keys.f)
+		changed = door_open(game, game->ray);
 	if (update_player(game))
 		changed = 1;
 	if (changed)

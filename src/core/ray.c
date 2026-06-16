@@ -68,24 +68,14 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 void	calcul_nb_texture(t_game *game, t_ray *ray, int side,
 		double perpWallDist)
 {
-	if (ray->mapY < game->player.pos.y)
-	{
-		if (side == 1)
-			ray->tex = 0;
-		else if (ray->rayDir.x < 0)
-			ray->tex = 2;
-		else
-			ray->tex = 3;
-	}
+	if (side == 1 && ray->mapY < game->player.pos.y)
+		ray->tex = 0;
+	else if (side == 1)
+		ray->tex = 1;
+	else if (ray->rayDir.x < 0)
+		ray->tex = 2;
 	else
-	{
-		if (side == 1)
-			ray->tex = 1;
-		else if (ray->rayDir.x < 0)
-			ray->tex = 2;
-		else
-			ray->tex = 3;
-	}
+		ray->tex = 3;
 	if (side == 0)
 		ray->wallX = game->player.pos.y + perpWallDist * ray->rayDir.y;
 	else
