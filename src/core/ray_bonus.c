@@ -60,7 +60,8 @@ int	algorithme_dda(t_game *game, t_ray *ray)
 			return (-1);
 		if (ray->mapX < 0 || ray->mapX >= game->map.row_len[ray->mapY])
 			return (-1);
-		if (game->map.grid[ray->mapY][ray->mapX] == '1')
+		if (game->map.grid[ray->mapY][ray->mapX] == '1'
+			|| game->map.grid[ray->mapY][ray->mapX] == '2')
 			break ;
 	}
 	return (side);
@@ -70,6 +71,14 @@ void	calcul_nb_texture(t_game *game, t_ray *ray, int side,
 {
 	if (game->map.grid[ray->mapY][ray->mapX] == '2')
 		ray->tex = 4;
+	else if (game->map.grid[ray->mapY][ray->mapX - 1] == '3' || (ray->mapY >= 1
+			&& game->map.grid[ray->mapY - 1][ray->mapX] == '3'))
+		ray->tex = 6;
+	else if (((ray->mapX + 1) < game->map.row_len[ray->mapY]
+			&& game->map.grid[ray->mapY][ray->mapX + 1] == '3') || ((ray->mapY
+				+ 1) < game->map.height && game->map.grid[ray->mapY
+			+ 1][ray->mapX] == '3'))
+		ray->tex = 5;
 	else if (ray->mapY < game->player.pos.y)
 	{
 		if (side == 1)

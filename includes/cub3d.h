@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/15 16:37:20 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/16 17:36:14 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@ typedef struct s_mini_map
 	int			width;
 	int			mapX;
 	int			mapY;
+	int			Ydraw;
+	int			Xdraw;
 }				t_minimap;
 
 // configuration pour .cub

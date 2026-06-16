@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/15 16:57:08 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/16 17:34:00 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	start_engine(t_game *game)
 		i++;
 	}
 	if (game->map.height > 5 && game->map.width > 5)
-		mini_map(game, game->mini_map, game->player);
+		mini_map(game, game->mini_map);
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
 		0, 0);
 }
