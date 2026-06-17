@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   update.c                                           :+:      :+:    :+:   */
+/*   update_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/16 23:20:55 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 10:27:07 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ int	game_loop(void *param)
 		rotate_player(&game->player, angle);
 		changed = 1;
 	}
-	if (game->keys.f)
+	if (game->keys.f
+		&& game->map.grid[(int)game->player.pos.y][(int)game->player.pos.x] == '0')
 		changed = door_open(game, game->ray);
 	if (update_player(game))
 		changed = 1;
