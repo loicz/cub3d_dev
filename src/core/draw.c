@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/13 11:30:52 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 11:29:17 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,6 @@ void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 					game->mlx.frame.line_len)] = color;
 		y++;
 		i++;
-	}
-	if (text == 1)
-	{
-		// 	game->ray.wallX -= floor(game->ray.wallX);
-		// 	printf("x %f\n", game->ray.wallX
-		// * game->mlx.tex[game->ray.tex].width);
-		// 	// printf("img.width %d\n", game->mlx.tex[game->ray.tex].width);
 	}
 }
 
