@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini-map_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 00:24:02 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:10:57 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	draw_mini_map(t_game *game, t_minimap *m, int i)
 {
 	while (i < minimap_W)
 	{
-		if (m->mapY >= game->map.height
+		if (m->mapY < 0 || m->mapY >= game->map.height || m->mapX < 0
 			|| m->mapX >= game->map.row_len[m->mapY])
 			m->mapX = m->mapX;
 		else if (m->mapX == (int)game->player.pos.x

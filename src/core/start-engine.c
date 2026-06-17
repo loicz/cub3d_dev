@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start-engine.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/13 11:01:06 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:22:47 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,11 @@ int	load_texture(t_game *game, t_img *tex, int i)
 	tex->line_len /= 4;
 	return (0);
 }
-int	init_mlx(t_game *game)
+int	init_mlx(t_game *game, t_mlx *mlx)
 {
-	t_mlx	*mlx;
-	int		i;
+	int	i;
 
 	i = 0;
-	mlx = &game->mlx;
 	mlx->ptr = mlx_init();
 	if (!mlx->ptr)
 		return (err_msg("mlx: init failed"));
@@ -69,7 +67,8 @@ int	init_mlx(t_game *game)
 	mlx->frame.line_len /= 4;
 	while (i < 4)
 	{
-		load_texture(game, &game->mlx.tex[i], i);
+		if (load_texture(game, &game->mlx.tex[i], i))
+			return (1);
 		i++;
 	}
 	return (0);
@@ -84,7 +83,7 @@ int	main(int ac, char **av)
 	ft_bzero(&game, sizeof(t_game));
 	if (parse_scene(av[1], &game))
 		return (1);
-	if (init_mlx(&game))
+	if (init_mlx(&game, &game.mlx))
 	{
 		destroy_mlx(&game);
 		free_parser_data(&game);

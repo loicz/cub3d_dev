@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start-engine_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 00:23:32 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:29:02 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
-	if (game->map.height > 5 && game->map.width > 5)
-		mini_map(game, game->mini_map);
+	// if (game->map.height > 5 && game->map.width > 5)
+	mini_map(game, game->mini_map);
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
 		0, 0);
 }
@@ -81,7 +81,8 @@ int	init_mlx(t_game *game, t_mlx *mlx)
 	fill_path_door(&game->config);
 	while (i < 7)
 	{
-		load_texture(game, &game->mlx.tex[i], i);
+		if (load_texture(game, &game->mlx.tex[i], i))
+			return (1);
 		i++;
 	}
 	return (0);
