@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 11:29:17 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 16:00:43 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	color_texture(t_img img, int x, int i, int distance)
 	color = img.addr[get_index(x, y, img.line_len)];
 	return (color);
 }
+
 void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
 {
 	int	i;
@@ -68,10 +69,7 @@ void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
 	min_win.y = 0;
 	if (high_wall.y >= 0 && high_wall.y <= WIN_H / 2)
 		draw_vertical_line(game, min_win, high_wall, game->config.ceil_color);
-	// dessiner le ciel
 	if (low_wall.y <= WIN_H && low_wall.y >= WIN_H / 2)
 		draw_vertical_line(game, low_wall, max_win, game->config.floor_color);
-	// dessiner le sol
 	draw_vertical_line(game, high_wall, low_wall, -1);
-	// dessiner le mur
 }

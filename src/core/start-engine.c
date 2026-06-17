@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 15:22:47 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:58:10 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	start_engine(t_game *game)
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
 		0, 0);
 }
+
 int	load_texture(t_game *game, t_img *tex, int i)
 {
 	tex->img = mlx_xpm_file_to_image(game->mlx.ptr, game->config.tex_path[i],
@@ -46,6 +47,7 @@ int	load_texture(t_game *game, t_img *tex, int i)
 	tex->line_len /= 4;
 	return (0);
 }
+
 int	init_mlx(t_game *game, t_mlx *mlx)
 {
 	int	i;

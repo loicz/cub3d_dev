@@ -71,15 +71,18 @@ void	calcul_nb_texture(t_game *game, t_ray *ray)
 {
 	if (game->map.grid[ray->mapY][ray->mapX] == '2')
 		ray->tex = 4;
-	else if (ray->side == 0 && ((ray->mapX - 1 >= 0
+	else if (ray->side == 0
+		&& ((ray->mapX - 1 >= 0
 				&& game->map.grid[ray->mapY][ray->mapX - 1] == '3')
-			|| ((ray->mapX + 1) < game->map.row_len[ray->mapY]
-				&& game->map.grid[ray->mapY][ray->mapX + 1] == '3')))
+		|| ((ray->mapX + 1) < game->map.row_len[ray->mapY]
+			&& game->map.grid[ray->mapY][ray->mapX + 1] == '3')))
 		ray->tex = 5;
-	else if (ray->side == 1 && ((ray->mapY - 1 >= 0 && game->map.grid[ray->mapY
-				- 1][ray->mapX] == '3') || ((ray->mapY + 1) < game->map.height
-				&& game->map.grid[ray->mapY + 1][ray->mapX] == '3')))
-		ray->tex = 5;
+	else if (ray->side == 1
+		&& ((ray->mapY - 1 >= 0
+				&& game->map.grid[ray->mapY - 1][ray->mapX] == '3')
+		|| ((ray->mapY + 1) < game->map.height
+			&& game->map.grid[ray->mapY + 1][ray->mapX] == '3')))
+		ray->tex = 6;
 	else if (ray->side == 1 && ray->mapY < game->player.pos.y)
 		ray->tex = 0;
 	else if (ray->side == 1)

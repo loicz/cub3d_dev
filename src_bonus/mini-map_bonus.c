@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 15:10:57 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:58:58 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,9 @@ void	draw_cub(t_game *game, int y, int x, int color)
 	{
 		max_win.x = i + ((x * game->mini_map.width) / minimap_W);
 		min_win.x = i + ((x * game->mini_map.width) / minimap_W);
-		// printf("x:%f\n", x);
-		// printf("x:%f\n", min_win.x);
 		draw_vertical_line(game, min_win, max_win, color);
 		i++;
-		// printf("enter\n");
 	}
-	// printf("\n\n\n\n");
-	// printf("game->mini_map.width/minimap_W:%d\n", game->mini_map.width
-	// / minimap_W);
-	// printf("i:%d\n", i);
 }
 
 void	draw_mini_map(t_game *game, t_minimap *m, int i)
@@ -54,7 +47,6 @@ void	draw_mini_map(t_game *game, t_minimap *m, int i)
 		else if (game->map.grid[m->mapY][m->mapX] == '2'
 			|| game->map.grid[m->mapY][m->mapX] == '3')
 			draw_cub(game, m->Ydraw, m->Xdraw, 0x8A3A01);
-		// printf("m->xdraw:%d\n", m->Xdraw);
 		i++;
 		m->Xdraw++;
 		m->mapX++;
@@ -63,17 +55,16 @@ void	draw_mini_map(t_game *game, t_minimap *m, int i)
 
 void	mini_map(t_game *game, t_minimap m)
 {
-	int	startX;
+	int	startx;
 	int	i;
 
 	m.mapX = (int)game->player.pos.x - (int)(minimap_W / 2);
 	m.mapY = (int)game->player.pos.y - (int)(minimap_W / 2);
-	// printf("(int)(minimap_W / 2):%d\n", (int)(minimap_W / 2));
-	startX = m.mapX;
+	startx = m.mapX;
 	while (m.mapY - ((int)game->player.pos.y - (int)(minimap_W
-				/ 2)) < minimap_W)
+			/ 2)) < minimap_W)
 	{
-		m.mapX = startX;
+		m.mapX = startx;
 		i = 0;
 		m.Ydraw = m.mapY - ((int)game->player.pos.y - (int)(minimap_W / 2));
 		m.Xdraw = m.mapX - ((int)game->player.pos.x - (int)(minimap_W / 2));

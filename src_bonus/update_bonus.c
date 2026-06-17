@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/17 10:27:07 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 16:00:09 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ int	game_loop(void *param)
 		changed = 1;
 	}
 	if (game->keys.f
-		&& game->map.grid[(int)game->player.pos.y][(int)game->player.pos.x] == '0')
+		&& game->map.grid[(int)game->player.pos.y]
+		[(int)game->player.pos.x] == '0')
 		changed = door_open(game, game->ray);
 	if (update_player(game))
 		changed = 1;

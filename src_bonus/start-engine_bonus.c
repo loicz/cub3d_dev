@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 15:29:02 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:59:19 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ void	start_engine(t_game *game)
 		draw_window(game, i, high_wall, low_wall);
 		i++;
 	}
-	// if (game->map.height > 5 && game->map.width > 5)
-	mini_map(game, game->mini_map);
+	if (game->map.height > 5 && game->map.width > 5)
+		mini_map(game, game->mini_map);
 	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
 		0, 0);
 }
+
 int	load_texture(t_game *game, t_img *tex, int i)
 {
 	tex->img = mlx_xpm_file_to_image(game->mlx.ptr, game->config.tex_path[i],
@@ -52,6 +53,7 @@ int	load_texture(t_game *game, t_img *tex, int i)
 	tex->line_len /= 4;
 	return (0);
 }
+
 void	fill_path_door(t_config *config)
 {
 	config->tex_path[4] = "./textures/doors-close.xpm";
@@ -87,6 +89,7 @@ int	init_mlx(t_game *game, t_mlx *mlx)
 	}
 	return (0);
 }
+
 int	main(int ac, char **av)
 {
 	t_game	game;

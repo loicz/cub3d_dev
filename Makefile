@@ -23,15 +23,6 @@ D_EVENTS = ./src/events/
 D_BONUS = ./src_bonus/
 
 #### SOURCE ####
-ENGINE_FILES = $(D_ENGINE)start-engine.c \
-		$(D_ENGINE)draw.c \
-		$(D_ENGINE)ray.c \
-
-BONUS_ENGINE_FILES = $(D_BONUS)start-engine_bonus.c \
-		$(D_ENGINE)draw.c \
-		$(D_BONUS)ray_bonus.c \
-		$(D_BONUS)mini-map_bonus.c 
-
 PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_PARSE)read_scene.c \
 				$(D_PARSE)get_config.c \
@@ -44,6 +35,16 @@ PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_GNL)get_next_line.c \
 				$(D_UTILS)utils.c \
 				$(D_GNL)get_next_line_utils.c
+
+ENGINE_FILES = $(D_ENGINE)start-engine.c \
+		$(D_ENGINE)draw.c \
+		$(D_ENGINE)ray.c \
+
+BONUS_ENGINE_FILES = $(D_BONUS)start-engine_bonus.c \
+		$(D_ENGINE)draw.c \
+		$(D_BONUS)ray_bonus.c \
+		$(D_BONUS)mini-map_bonus.c 
+
 
 EVENT_FILES =	$(D_EVENTS)hooks.c \
 				$(D_EVENTS)update.c \
