@@ -61,9 +61,9 @@ Run the executable by passing a valid configuration file with a `.cub` extension
 
     Lode's Raycasting Tutorial - Main source for understanding the Digital Differential Analysis (DDA) algorithm and mathematical implementation of raycasting.
 
-*    [Documentation raycasting] (https://lodev.org/cgtutor/raycasting.html) - Documentation raycasting with algorithm DDA for calculating the distance of rays.
-*    [Fran-Byte cub3D Approach Guide] (https://42-fran-byte-f94097.gitlab.io/docs/cub3d/cub3d-approach-en/#/) - Structural guidelines for the project.
-*    [Nathan's cub3D Project Overview] (https://nathaan.me/projects/cub3d) - Inspiration on engineering math workflows.
+*    [Documentation raycasting](https://lodev.org/cgtutor/raycasting.html) - Documentation raycasting with algorithm DDA for calculating the distance of rays.
+*    [Fran-Byte cub3D Approach Guide](https://42-fran-byte-f94097.gitlab.io/docs/cub3d/cub3d-approach-en/#/) - Structural guidelines for the project.
+*    [Nathan's cub3D Project Overview](https://nathaan.me/projects/cub3d) - Inspiration on engineering math workflows.
 *    [HackMD cub3D Reference](https://hackmd.io/@nszl/H1LXByIE2) - Notes on data structures and key bindings.
 *    [Cub3d-Linux GitHub iciamyplant](https://github.com/iciamyplant/Cub3d-Linux) - Multi-platform reference setup for miniLibX under Linux.
 
