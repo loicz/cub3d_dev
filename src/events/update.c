@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/17 00:12:12 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 12:21:45 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,27 +73,11 @@ int	update_player(t_game *game)
 
 int	game_loop(void *param)
 {
-	double	angle;
 	int		changed;
 	t_game	*game;
 
 	game = (t_game *)param;
-	angle = 0;
-	changed = 0;
-	if (game->keys.left)
-		angle -= ROT_SPEED;
-	if (game->keys.right)
-		angle += ROT_SPEED;
-	if (game->keys.mouse_dx)
-	{
-		angle += game->keys.mouse_dx * MOUSE_SENS;
-		game->keys.mouse_dx = 0;
-	}
-	if (angle != 0)
-	{
-		rotate_player(&game->player, angle);
-		changed = 1;
-	}
+	changed = update_rotation(game);
 	if (update_player(game))
 		changed = 1;
 	if (changed)

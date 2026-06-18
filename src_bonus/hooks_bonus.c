@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 12:39:57 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/18 00:53:15 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/18 12:34:22 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ static void	set_key_state(int keycode, t_game *game, int state)
 		game->keys.s = state;
 	else if (keycode == KEY_D)
 		game->keys.d = state;
-	else if (keycode == KEY_F)
-		game->keys.f = state;
 	else if (keycode == KEY_LEFT)
 		game->keys.left = state;
 	else if (keycode == KEY_RIGHT)
