@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   a.c                                              :+:      :+:    :+:   */
+/*   ray.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/11 11:55:33 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 15:57:48 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ double	launch_ray(int nb, t_game *game, t_ray *ray)
 	else
 		ray->wallX = game->player.pos.x + perp_wall_dist * ray->rayDir.x;
 	ray->wallX -= floor(ray->wallX);
-	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
 	calcul_nb_texture(game, ray);
+	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
 	return (perp_wall_dist);
 }

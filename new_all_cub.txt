@@ -1,0 +1,2652 @@
+#### VARIABLES ####
+NAME = cub3D
+TEST = parser_test
+LIBFT = ./libft/libft.a
+MLX = ./minilibx-linux/libmlx.a
+
+
+
+VAL = valgrind
+LEAKS = -s --leak-check=full --show-leak-kinds=all --track-fds=yes --track-origins=yes
+HEADER_PATH = includes
+SUPP = --suppressions=mlx.supp
+CC= cc
+INC = -I $(HEADER_PATH) -I ./libft -I ./minilibx-linux -IGNL
+# OBJ=ft_*.c =.o
+# SRCS = $(HEADER_PATH)ft_atoi
+D_ENGINE = ./src/core/
+D_PARSE = ./src/parsing/
+D_UTILS = ./src/utils/
+D_GNL = ./GNL/
+D_TEST = ./tests/
+D_EVENTS = ./src/events/
+D_BONUS = ./src_bonus/
+
+#### SOURCE ####
+PARSER_FILES =	$(D_PARSE)parse_scene.c \
+				$(D_PARSE)read_scene.c \
+				$(D_PARSE)get_config.c \
+				$(D_PARSE)get_config_store.c \
+				$(D_PARSE)get_config_utils.c \
+				$(D_PARSE)map_lines.c \
+				$(D_PARSE)map_build.c \
+				$(D_PARSE)map_check.c \
+				$(D_PARSE)parser_free.c \
+				$(D_GNL)get_next_line.c \
+				$(D_GNL)get_next_line_utils.c
+
+ENGINE_FILES = $(D_ENGINE)start-engine.c \
+		$(D_ENGINE)draw.c \
+		$(D_ENGINE)ray.c \
+
+BONUS_ENGINE_FILES = $(D_BONUS)start-engine_bonus.c \
+		$(D_ENGINE)draw.c \
+		$(D_BONUS)ray_bonus.c \
+		$(D_BONUS)mini-map_bonus.c 
+
+
+EVENT_FILES =	$(D_EVENTS)hooks.c \
+				$(D_EVENTS)update.c \
+				$(D_EVENTS)move.c \
+				$(D_EVENTS)rotate.c \
+				$(D_EVENTS)update_rotation.c \
+				$(D_EVENTS)expose.c
+
+BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
+					$(D_BONUS)update_bonus.c \
+					$(D_BONUS)update_rotation_bonus.c \
+					$(D_EVENTS)move.c \
+					$(D_EVENTS)rotate.c \
+					$(D_EVENTS)expose.c \
+					$(D_BONUS)door_bonus.c \
+					$(D_BONUS)mouse_bonus.c
+
+SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(D_PARSE)map_check_utils.c $(EVENT_FILES) $(D_UTILS)utils.c
+BONUS_SRC_FILES = $(BONUS_ENGINE_FILES) $(PARSER_FILES) $(D_BONUS)map_check_utils_bonus.c $(BONUS_EVENT_FILES) $(D_BONUS)utils_bonus.c
+
+TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
+
+OBJ_FILES = $(SRC_FILES:.c=.o)
+BONUS_OBJ_FILES = $(BONUS_SRC_FILES:.c=.o)
+TEST_OBJ = $(TEST_FILES:.c=.o)
+# SUPP = --suppressions=$(PWD)/readline.supp
+# HEADER_PATH = include
+CC= cc
+# CFLAGS=-Wall -Wextra -Werror -I $(HEADER0_PATH)
+CFLAGS=-Wall -Wextra -Werror -g3 -std=gnu99
+# OBJ=ft_*.c =.o
+# SRCS = $(HEADER_PATH)ft_atoi
+
+#### SOURCE ####
+OBJ_FILES = $(SRC_FILES:.c=.o)
+
+#### RULES ####
+all: ${NAME} PRINT
+
+
+${NAME} : ${LIBFT} ${MLX} ${OBJ_FILES}
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
+
+$(TEST) : $(LIBFT) $(TEST_OBJ)
+	@$(CC) $(CFLAGS) $(TEST_OBJ) $(LIBFT) -o $(TEST)
+
+%.o: %.c
+	@${CC} ${CFLAGS} $(INC) -c $< -o $@
+
+${LIBFT} :
+	@$(MAKE) -C ./libft
+
+${MLX} :
+	@$(MAKE) -C ./minilibx-linux
+
+good: re clean
+
+bonus: $(LIBFT) $(MLX) $(BONUS_OBJ_FILES)
+	@$(CC) $(CFLAGS) $(BONUS_OBJ_FILES) $(LIBFT) -L./minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
+	@echo "$(NAME) bonus ✅"
+
+clean:
+	@rm -f ${OBJ_FILES} ${BONUS_OBJ_FILES} ${TEST_OBJ}
+	@$(MAKE) -C ./libft clean
+	@$(MAKE) -C ./minilibx-linux clean
+
+fclean: clean
+	@rm -f ${NAME} ${TEST} .bonus
+	@$(MAKE) -C ./libft fclean
+
+re: fclean all
+
+val : ${NAME}
+	@$(VAL) $(LEAKS) $(SUPP) ./$(NAME) ./maps/test-parsing.cub
+
+parser: $(TEST)
+	@echo "$(TEST) ✅"
+
+PRINT :
+	@echo $(NAME) ✅
+
+.PHONY: all clean fclean re good val parser val-parser PRINT bonus
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 00:49:10 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef CUB3D_H
+# define CUB3D_H
+
+# include "../libft/libft.h"
+# include "../minilibx-linux/mlx.h"
+# include "get_next_line.h"
+# include "libft.h"
+# include "mlx.h"
+# include <fcntl.h>
+# include <math.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/time.h>
+# include <unistd.h>
+
+// FENETRE
+// servir a : ouvrir la fenetre via mlx + engine
+// (nombre de  colonnes de rayons lancees par frame)
+# define WIN_W 1280
+# define WIN_H 720
+# define WIN_TITLE "cub3D"
+
+// MINI_MAP
+# define minimap_W 5
+
+// MOVEMENT
+// servir a : module events
+// senario : mettre a jour le player
+// ces valeur seront modifies par evaluateurs au moment de correction
+# define MOVE_SPEED 0.045
+# define ROT_SPEED 0.035
+// collision: la distance securise minimale entre le player et le mur
+# define PLAYER_RADIUS 0.20
+// longuer du plan camera(la plus part de gens
+// fait avec 0.66 pour evider l'effet Fisheye)
+# define PLANE_LEN 0.66
+
+// KEYCODES
+// servir a : module events
+// valeurs definies par protocol X11 sous Linux
+# define KEY_ESC 65307
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_F 102
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+
+// Event type/mask
+// servir a : module events (ex: parametre de mlx_hook dans setup_hooks)
+# define EV_KEYPRESS 2
+# define EV_KEYRELEASE 3
+# define EV_DESTROY 17
+# define M_KEYPRESS 1L
+# define M_KEYRELEASE 2L
+
+// MOUSE BONUS
+# define EV_MOUSEMOVE 6
+# define M_MOUSEMOVE 64L
+# define MOUSE_SENS 0.002
+
+// DOOR BONUS
+# define DOOR_RANGE 1.50
+# define DOOR_STEP 0.05
+// DATA TYPE
+
+typedef struct s_line
+{
+	char		**data;
+	int			size;
+	int			capacity;
+}				t_line;
+
+// un vecteur 2d (ex: coordonees)
+typedef struct s_vec
+{
+	double		x;
+	double		y;
+}				t_vec;
+
+// structure pour image rendering
+//(tu peux modifier en stucture de donnees que tu preferes si tu veux)
+typedef struct s_img
+{
+	void		*img;
+	int			*addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
+	int			width;
+	int			height;
+}				t_img;
+
+typedef struct s_mlx
+{
+	void		*ptr;
+	void		*win;
+	t_img		frame;
+	t_img		tex[7];
+}				t_mlx;
+
+/* t_dir : enum des directions servant d'indice pour tex_path[4] et tex[4]
+   langage commun aux trois modules : parser, mlx, engine
+   ex : "NO" -> tex_path[NORTH] ; mur nord -> tex[NORTH] */
+typedef enum e_dir
+{
+	NORTH = 0,
+	SOUTH = 1,
+	WEST = 2,
+	EAST = 3,
+	UNSET = -1
+}				t_dir;
+
+// informations player
+// dir : l'orientation de player
+// plane : longueur du plan camera
+
+typedef struct s_player
+{
+	t_vec		pos;
+	t_vec		dir;
+	t_vec		plane;
+}				t_player;
+
+typedef struct s_ray
+{
+	t_vec		rayDir;
+	t_vec		deltaDist;
+	t_vec		sideDist;
+	t_vec		step;
+	int			mapX;
+	int			mapY;
+	double		wallX;
+	int			tex;
+	int			side;
+	int			texX;
+}				t_ray;
+// map
+/* grid    : tableau de lignes, acces case par grid[y][x]
+   row_len : longueur reelle de chaque ligne (a verifier avant acces)
+   height  : nombre de lignes
+   width   : longueur de la ligne la plus longue (borne max, pas par ligne) */
+typedef struct s_map
+{
+	char		**grid;
+	int			*row_len;
+	int			height;
+	int			width;
+}				t_map;
+
+typedef struct s_mini_map
+{
+	int			width;
+	int			mapX;
+	int			mapY;
+	int			Ydraw;
+	int			Xdraw;
+}				t_minimap;
+
+// configuration pour .cub
+// contenir 4 path de texture et le couleur du plafond et le sol
+// has_floor et has_ceil pour differencier le couleur noir {0,0,0} et "non set""
+typedef struct s_config
+{
+	char		*tex_path[7];
+	int			floor_color;
+	int			ceil_color;
+	int			has_floor;
+	int			has_ceil;
+}				t_config;
+
+// l'etat actuel de clavier
+typedef struct s_keys
+{
+	int			w;
+	int			a;
+	int			s;
+	int			d;
+	int			f;
+	int			left;
+	int			right;
+	int			mouse_dx;
+}				t_keys;
+
+/* ceete stucture est le contexte central
+   accede a tout le monde (player / map / frame / keys) */
+typedef struct s_game
+{
+	t_mlx		mlx;
+	t_config	config;
+	t_map		map;
+	t_player	player;
+	t_minimap	mini_map;
+	t_ray		ray;
+	t_keys		keys;
+}				t_game;
+# include "./engine.h"
+
+// parsing
+int				parse_scene(char *path, t_game *game);
+int				read_scene(int fd, t_game *game, t_line *tmp_line);
+int				get_map_config(t_game *game, bool *map_start, char *line);
+int				get_map_content(t_line *tmp, bool map_start, char *line);
+int				build_map(t_game *game, t_line *tmp);
+int				validate_map(t_game *game);
+int				write_colors(char *line, char color_p, t_game *game);
+int				is_config_space(char c);
+int				is_config_id(char *line);
+int				read_config_info(t_game *game, char *line);
+int				is_player_char(char c);
+int				is_valid_char(char c);
+void			free_tmp_lines(t_line *tmp);
+void			free_parser_data(t_game *game);
+int				is_map_closed(t_map *map);
+
+// EVENTS
+void			setup_hooks(t_game *game);
+int				on_key_press(int keycode, void *param);
+int				on_key_release(int keycode, void *param);
+int				game_loop(void *param);
+int				update_player(t_game *game);
+int				move_player(t_game *game, double dx, double dy);
+int				can_stand_at(t_game *game, double x, double y);
+int				is_walkable(t_game *game, int x, int y);
+void			rotate_player(t_player *player, double angle);
+int				on_expose(void *param);
+int				door_open(t_game *game);
+int				update_rotation(t_game *game);
+
+// ENGINE ENTRY
+void			start_engine(t_game *game);
+
+void			setup_mouse_hook(t_game *game);
+int				on_mouse_move(int x, int y, void *param);
+
+// utils
+int				err_msg(char *s);
+
+// clean_up
+void			destroy_mlx(t_game *game);
+int				on_destroy(void *param);
+#endif
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   engine.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 16:07:17 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/16 17:48:37 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// MINI MAP
+void	mini_map(t_game *game, t_minimap m);
+
+// RAY
+double	launch_ray(int nb, t_game *game, t_ray *ray);
+// DRAW
+void	mini_map(t_game *game, t_minimap mini_mapm);
+int		get_index(int x, int y, int size_line);
+void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color);
+// void	draw_vertical_line(t_vec low, t_vec high, t_img img, int color);
+void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall);
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/17 16:00:43 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/cub3d.h"
+
+int	get_index(int x, int y, int size_line)
+{
+	return (y * size_line + x);
+}
+
+int	color_texture(t_img img, int x, int i, int distance)
+{
+	int		color;
+	double	ratio;
+	int		y;
+
+	ratio = (double)i / (double)distance;
+	y = ratio * img.height;
+	color = img.addr[get_index(x, y, img.line_len)];
+	return (color);
+}
+
+void	draw_vertical_line(t_game *game, t_vec low, t_vec high, int color)
+{
+	int	i;
+	int	text;
+	int	dist;
+	int	y;
+
+	if (high.x != low.x)
+		return ;
+	y = low.y;
+	text = 0;
+	if (color == -1)
+		text = 1;
+	i = 0;
+	dist = (int)fabs(low.y - high.y);
+	while (i <= dist)
+	{
+		if (text == 1)
+			color = color_texture(game->mlx.tex[game->ray.tex], game->ray.texX,
+					i, dist);
+		if (low.x >= 0 && low.x < game->mlx.frame.width && y >= 0
+			&& y < game->mlx.frame.height)
+			game->mlx.frame.addr[get_index(low.x, y,
+					game->mlx.frame.line_len)] = color;
+		y++;
+		i++;
+	}
+}
+
+void	draw_window(t_game *game, int x, t_vec high_wall, t_vec low_wall)
+{
+	t_vec	max_win;
+	t_vec	min_win;
+
+	max_win.x = x;
+	max_win.y = WIN_H;
+	min_win.x = x;
+	min_win.y = 0;
+	if (high_wall.y >= 0 && high_wall.y <= WIN_H / 2)
+		draw_vertical_line(game, min_win, high_wall, game->config.ceil_color);
+	if (low_wall.y <= WIN_H && low_wall.y >= WIN_H / 2)
+		draw_vertical_line(game, low_wall, max_win, game->config.floor_color);
+	draw_vertical_line(game, high_wall, low_wall, -1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   a.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/11 11:55:33 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/cub3d.h"
+
+void	calcul_sidedist(t_game *game, t_ray *ray)
+{
+	if (ray->rayDir.x < 0)
+	{
+		ray->step.x = -1;
+		ray->sideDist.x = (game->player.pos.x - ray->mapX) * ray->deltaDist.x;
+	}
+	else
+	{
+		ray->step.x = 1;
+		ray->sideDist.x = (ray->mapX + 1.0 - game->player.pos.x)
+			* ray->deltaDist.x;
+	}
+	if (ray->rayDir.y < 0)
+	{
+		ray->step.y = -1;
+		ray->sideDist.y = (game->player.pos.y - ray->mapY) * ray->deltaDist.y;
+	}
+	else
+	{
+		ray->step.y = 1;
+		ray->sideDist.y = (ray->mapY + 1.0 - game->player.pos.y)
+			* ray->deltaDist.y;
+	}
+}
+
+int	algorithme_dda(t_game *game, t_ray *ray)
+{
+	int	side;
+
+	while (1)
+	{
+		if (ray->sideDist.x < ray->sideDist.y)
+		{
+			ray->sideDist.x += ray->deltaDist.x;
+			ray->mapX += ray->step.x;
+			side = 0;
+		}
+		else
+		{
+			ray->sideDist.y += ray->deltaDist.y;
+			ray->mapY += ray->step.y;
+			side = 1;
+		}
+		if (ray->mapY < 0 || ray->mapY >= game->map.height)
+			return (-1);
+		if (ray->mapX < 0 || ray->mapX >= game->map.row_len[ray->mapY])
+			return (-1);
+		if (game->map.grid[ray->mapY][ray->mapX] == '1')
+			break ;
+	}
+	return (side);
+}
+
+void	calcul_nb_texture(t_game *game, t_ray *ray)
+{
+	if (ray->side == 1 && ray->mapY < game->player.pos.y)
+		ray->tex = 0;
+	else if (ray->side == 1)
+		ray->tex = 1;
+	else if (ray->rayDir.x < 0)
+		ray->tex = 2;
+	else
+		ray->tex = 3;
+}
+
+void	init_ray(t_game *game, t_ray *ray, int nb)
+{
+	double	camerax;
+
+	ray->mapX = (int)game->player.pos.x;
+	ray->mapY = (int)game->player.pos.y;
+	camerax = 2 * nb / (double)WIN_W - 1;
+	ray->rayDir.x = game->player.dir.x + game->player.plane.x * camerax;
+	ray->rayDir.y = game->player.dir.y + game->player.plane.y * camerax;
+	ray->deltaDist.x = fabs(1 / ray->rayDir.x);
+	ray->deltaDist.y = fabs(1 / ray->rayDir.y);
+}
+
+double	launch_ray(int nb, t_game *game, t_ray *ray)
+{
+	double	perp_wall_dist;
+
+	init_ray(game, ray, nb);
+	calcul_sidedist(game, ray);
+	ray->side = algorithme_dda(game, ray);
+	if (ray->side == 0)
+		perp_wall_dist = (ray->mapX - game->player.pos.x + (1
+					- (double)ray->step.x) / 2) / ray->rayDir.x;
+	else
+		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
+					- (double)ray->step.y) / 2) / ray->rayDir.y;
+	if (ray->side == 0)
+		ray->wallX = game->player.pos.y + perp_wall_dist * ray->rayDir.y;
+	else
+		ray->wallX = game->player.pos.x + perp_wall_dist * ray->rayDir.x;
+	ray->wallX -= floor(ray->wallX);
+	ray->texX = (ray->wallX * game->mlx.tex[ray->tex].width);
+	calcul_nb_texture(game, ray);
+	return (perp_wall_dist);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   start-engine.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/18 11:04:08 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/cub3d.h"
+
+void	start_engine(t_game *game)
+{
+	int		i;
+	double	dist_ray;
+	t_vec	high_wall;
+	t_vec	low_wall;
+
+	i = 0;
+	while (i < WIN_W)
+	{
+		dist_ray = launch_ray(i, game, &game->ray);
+		high_wall.x = i;
+		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
+		low_wall.x = i;
+		low_wall.y = WIN_H / 2 + ((1 / dist_ray * WIN_H / 2));
+		draw_window(game, i, high_wall, low_wall);
+		i++;
+	}
+	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
+		0, 0);
+}
+
+int	load_texture(t_game *game, t_img *tex, int i)
+{
+	int	len;
+
+	len = ft_strlen(game->config.tex_path[i]);
+	if (len <= 4)
+		return (err_msg("textures file must end with .xpm"));
+	if (ft_strncmp(game->config.tex_path[i] + len - 4, ".xpm", 4) != 0)
+		return (err_msg("textures file must end with .xpm"));
+	tex->img = mlx_xpm_file_to_image(game->mlx.ptr, game->config.tex_path[i],
+			&game->mlx.tex[i].width, &game->mlx.tex[i].height);
+	if (!tex->img)
+		return (err_msg("texture load failed, expected a valid XPM file"));
+	tex->addr = (int *)mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
+			&tex->endian);
+	if (!tex->addr)
+		return (err_msg("texture load failed, expected a valid XPM file"));
+	tex->line_len /= 4;
+	return (0);
+}
+
+int	init_mlx(t_game *game, t_mlx *mlx)
+{
+	int	i;
+
+	i = 0;
+	mlx->ptr = mlx_init();
+	if (!mlx->ptr)
+		return (err_msg("mlx: init failed"));
+	mlx->win = mlx_new_window(mlx->ptr, WIN_W, WIN_H, WIN_TITLE);
+	if (!mlx->win)
+		return (err_msg("mlx: window creation failed"));
+	mlx->frame.width = WIN_W;
+	mlx->frame.height = WIN_H;
+	mlx->frame.img = mlx_new_image(mlx->ptr, WIN_W, WIN_H);
+	if (!mlx->frame.img)
+		return (err_msg("mlx: image creation failed"));
+	mlx->frame.addr = (int *)mlx_get_data_addr(mlx->frame.img, &mlx->frame.bpp,
+			&mlx->frame.line_len, &mlx->frame.endian);
+	mlx->frame.line_len /= 4;
+	while (i < 4)
+	{
+		if (load_texture(game, &game->mlx.tex[i], i))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	main(int ac, char **av)
+{
+	t_game	game;
+
+	if (ac != 2)
+		return (err_msg("usage: ./cub3D <map.cub>"));
+	ft_bzero(&game, sizeof(t_game));
+	if (parse_scene(av[1], &game))
+		return (1);
+	if (init_mlx(&game, &game.mlx))
+	{
+		destroy_mlx(&game);
+		free_parser_data(&game);
+		return (1);
+	}
+	setup_hooks(&game);
+	start_engine(&game);
+	mlx_loop(game.mlx.ptr);
+	destroy_mlx(&game);
+	free_parser_data(&game);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expose.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/11 01:01:38 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/11 01:08:43 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	on_expose(void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win,
+		game->mlx.frame.img, 0, 0);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:14:55 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/11 17:39:24 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	set_key_state(int keycode, t_game *game, int state)
+{
+	if (keycode == KEY_W)
+		game->keys.w = state;
+	else if (keycode == KEY_A)
+		game->keys.a = state;
+	else if (keycode == KEY_S)
+		game->keys.s = state;
+	else if (keycode == KEY_D)
+		game->keys.d = state;
+	else if (keycode == KEY_LEFT)
+		game->keys.left = state;
+	else if (keycode == KEY_RIGHT)
+		game->keys.right = state;
+}
+
+void	setup_hooks(t_game *game)
+{
+	mlx_hook(game->mlx.win, EV_KEYPRESS, M_KEYPRESS, on_key_press, game);
+	mlx_hook(game->mlx.win, EV_KEYRELEASE, M_KEYRELEASE, on_key_release, game);
+	mlx_hook(game->mlx.win, EV_DESTROY, 0, on_destroy, game);
+	mlx_expose_hook(game->mlx.win, on_expose, game);
+	mlx_loop_hook(game->mlx.ptr, game_loop, game);
+}
+
+int	on_key_press(int keycode, void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	if (keycode == KEY_ESC)
+		return (on_destroy(game));
+	set_key_state(keycode, game, 1);
+	return (0);
+}
+
+int	on_key_release(int keycode, void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	set_key_state(keycode, game, 0);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:39:20 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/15 10:05:33 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	is_walkable(t_game *game, int x, int y)
+{
+	char	cell;
+
+	if (y < 0 || y >= game->map.height)
+		return (1);
+	if (x < 0 || x >= game->map.row_len[y])
+		return (1);
+	cell = game->map.grid[y][x];
+	if (cell == '1' || cell == ' ' || cell == '2')
+		return (1);
+	return (0);
+}
+
+int	can_stand_at(t_game *game, double x, double y)
+{
+	int	left;
+	int	right;
+	int	top;
+	int	bottom;
+
+	left = (int)floor(x - PLAYER_RADIUS);
+	right = (int)floor(x + PLAYER_RADIUS);
+	top = (int)floor(y - PLAYER_RADIUS);
+	bottom = (int)floor(y + PLAYER_RADIUS);
+	if (is_walkable(game, left, top))
+		return (0);
+	if (is_walkable(game, right, top))
+		return (0);
+	if (is_walkable(game, left, bottom))
+		return (0);
+	if (is_walkable(game, right, bottom))
+		return (0);
+	return (1);
+}
+
+int	move_player(t_game *game, double dx, double dy)
+{
+	double	new_x;
+	double	new_y;
+	int		moved;
+
+	moved = 0;
+	new_x = game->player.pos.x + dx;
+	if (can_stand_at(game, new_x, game->player.pos.y))
+	{
+		game->player.pos.x = new_x;
+		moved = 1;
+	}
+	new_y = game->player.pos.y + dy;
+	if (can_stand_at(game, game->player.pos.x, new_y))
+	{
+		game->player.pos.y = new_y;
+		moved = 1;
+	}
+	return (moved);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rotate.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:38:36 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/10 23:32:46 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	rotate_vec(t_vec *vec, double angle)
+{
+	double	old_x;
+	double	cos_a;
+	double	sin_a;
+
+	old_x = vec->x;
+	cos_a = cos(angle);
+	sin_a = sin(angle);
+	vec->x = vec->x * cos_a - vec->y * sin_a;
+	vec->y = old_x * sin_a + vec->y * cos_a;
+}
+
+void	rotate_player(t_player *player, double angle)
+{
+	rotate_vec(&player->dir, angle);
+	rotate_vec(&player->plane, angle);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 12:21:45 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	add_forward_move(t_game *game, double *dx, double *dy)
+{
+	if (game->keys.w)
+	{
+		*dx += game->player.dir.x;
+		*dy += game->player.dir.y;
+	}
+	if (game->keys.s)
+	{
+		*dx -= game->player.dir.x;
+		*dy -= game->player.dir.y;
+	}
+}
+
+static void	add_strafe_move(t_game *game, double *dx, double *dy)
+{
+	double	right_x;
+	double	right_y;
+
+	right_x = -game->player.dir.y;
+	right_y = game->player.dir.x;
+	if (game->keys.d)
+	{
+		*dx += right_x;
+		*dy += right_y;
+	}
+	if (game->keys.a)
+	{
+		*dx -= right_x;
+		*dy -= right_y;
+	}
+}
+
+static int	normalize_move(double *dx, double *dy)
+{
+	double	len;
+
+	len = sqrt((*dx * *dx) + (*dy * *dy));
+	if (len == 0)
+		return (0);
+	*dx = (*dx / len) * MOVE_SPEED;
+	*dy = (*dy / len) * MOVE_SPEED;
+	return (1);
+}
+
+int	update_player(t_game *game)
+{
+	double	dx;
+	double	dy;
+
+	dx = 0;
+	dy = 0;
+	add_forward_move(game, &dx, &dy);
+	add_strafe_move(game, &dx, &dy);
+	if (!normalize_move(&dx, &dy))
+		return (0);
+	return (move_player(game, dx, dy));
+}
+
+int	game_loop(void *param)
+{
+	int		changed;
+	t_game	*game;
+
+	game = (t_game *)param;
+	changed = update_rotation(game);
+	if (update_player(game))
+		changed = 1;
+	if (changed)
+		start_engine(game);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_rotation.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/18 12:23:14 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/18 14:54:23 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static double	get_rotation_angle(t_game *game)
+{
+	double	angle;
+
+	angle = 0;
+	if (game->keys.left)
+		angle -= ROT_SPEED;
+	if (game->keys.right)
+		angle += ROT_SPEED;
+	if (game->keys.mouse_dx)
+	{
+		angle += game->keys.mouse_dx * MOUSE_SENS;
+		game->keys.mouse_dx = 0;
+	}
+	return (angle);
+}
+
+int	update_rotation(t_game *game)
+{
+	double	angle;
+
+	angle = get_rotation_angle(game);
+	if (angle == 0)
+		return (0);
+	rotate_player(&game->player, angle);
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_config.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 11:32:46 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 00:44:39 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	is_map_begin(char c)
+{
+	return (c == '0' || c == '1' || c == 'N'
+		|| c == 'S' || c == 'E' || c == 'W');
+}
+
+static int	is_config_done(t_config *config)
+{
+	return (config->tex_path[NORTH] && config->tex_path[SOUTH]
+		&& config->tex_path[WEST] && config->tex_path[EAST]
+		&& config->has_floor && config->has_ceil);
+}
+
+int	get_map_config(t_game *game, bool *map_start, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && is_config_space(line[i]))
+		i++;
+	if (*map_start || !line[i])
+		return (0);
+	if (is_config_id(line + i))
+		return (read_config_info(game, line + i));
+	if (is_map_begin(line[i]))
+	{
+		if (!is_config_done(&game->config))
+			return (1);
+		*map_start = true;
+		return (0);
+	}
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_config_store.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:44:29 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 00:51:45 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	is_config_space(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\r');
+}
+
+int	is_config_id(char *line)
+{
+	if (!ft_strncmp(line, "NO", 2) && is_config_space(line[2]))
+		return (1);
+	if (!ft_strncmp(line, "SO", 2) && is_config_space(line[2]))
+		return (1);
+	if (!ft_strncmp(line, "WE", 2) && is_config_space(line[2]))
+		return (1);
+	if (!ft_strncmp(line, "EA", 2) && is_config_space(line[2]))
+		return (1);
+	if (line[0] == 'F' && is_config_space(line[1]))
+		return (1);
+	if (line[0] == 'C' && is_config_space(line[1]))
+		return (1);
+	return (0);
+}
+
+static int	get_single_info(char *line, int *start)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && is_config_space(line[i]))
+		i++;
+	if (!line[i])
+		return (1);
+	*start = i;
+	while (line[i] && !is_config_space(line[i]))
+		i++;
+	while (line[i] && is_config_space(line[i]))
+		i++;
+	if (line[i])
+		return (1);
+	return (0);
+}
+
+static int	set_texture(t_game *game, t_dir dir, char *line)
+{
+	int	start;
+
+	if (game->config.tex_path[dir])
+		return (1);
+	if (get_single_info(line, &start))
+		return (1);
+	game->config.tex_path[dir] = ft_strdup(line + start);
+	if (!game->config.tex_path[dir])
+		return (1);
+	return (0);
+}
+
+int	read_config_info(t_game *game, char *line)
+{
+	if (!ft_strncmp(line, "NO", 2))
+		return (set_texture(game, NORTH, line + 2));
+	if (!ft_strncmp(line, "SO", 2))
+		return (set_texture(game, SOUTH, line + 2));
+	if (!ft_strncmp(line, "WE", 2))
+		return (set_texture(game, WEST, line + 2));
+	if (!ft_strncmp(line, "EA", 2))
+		return (set_texture(game, EAST, line + 2));
+	if (line[0] == 'F')
+		return (write_colors(line + 1, 'F', game));
+	if (line[0] == 'C')
+		return (write_colors(line + 1, 'C', game));
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_config_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 11:36:15 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 01:19:28 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	ft_atoi_rgb(const char *s, int *out)
+{
+	int	n;
+	int	digit;
+	int	i;
+
+	n = 0;
+	i = 0;
+	while (s[i] && is_config_space(s[i]))
+		i++;
+	if (!(s[i] >= '0' && s[i] <= '9'))
+		return (1);
+	while (s[i] >= '0' && s[i] <= '9')
+	{
+		digit = s[i] - '0';
+		if (n > (255 - digit) / 10)
+			return (1);
+		n = n * 10 + digit;
+		i++;
+	}
+	while (s[i] && is_config_space(s[i]))
+		i++;
+	if (s[i] != '\0')
+		return (1);
+	*out = n;
+	return (0);
+}
+
+static int	rgb_to_int(int rgb[3])
+{
+	return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
+}
+
+static int	set_color_value(t_game *game, char color_p, int color)
+{
+	if (color_p == 'F')
+	{
+		if (game->config.has_floor)
+			return (1);
+		game->config.floor_color = color;
+		game->config.has_floor = 1;
+	}
+	else if (color_p == 'C')
+	{
+		if (game->config.has_ceil)
+			return (1);
+		game->config.ceil_color = color;
+		game->config.has_ceil = 1;
+	}
+	else
+		return (1);
+	return (0);
+}
+
+static int	read_rgb_part(char *line, int *i, int *out)
+{
+	int	start;
+
+	start = *i;
+	while (line[*i] && line[*i] != ',')
+		(*i)++;
+	if (start == *i)
+		return (1);
+	if (line[*i] == ',')
+	{
+		line[(*i)++] = '\0';
+		if (!line[*i])
+			return (1);
+	}
+	return (ft_atoi_rgb(line + start, out));
+}
+
+int	write_colors(char *line, char color_p, t_game *game)
+{
+	int	i;
+	int	count;
+	int	tmp_color;
+	int	rgb[3];
+
+	i = 0;
+	count = 0;
+	while (line[i] && is_config_space(line[i]))
+		i++;
+	while (line[i])
+	{
+		if (count == 3 || read_rgb_part(line, &i, &tmp_color))
+			return (1);
+		rgb[count++] = tmp_color;
+		if (!line[i] && count != 3)
+			return (1);
+	}
+	if (count != 3)
+		return (1);
+	return (set_color_value(game, color_p, rgb_to_int(rgb)));
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_build.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:57:16 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 01:59:47 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	alloc_map(t_game *game, t_line *tmp)
+{
+	game->map.grid = malloc(sizeof(char *) * (tmp->size + 1));
+	game->map.row_len = malloc(sizeof(int) * tmp->size);
+	if (!game->map.grid || !game->map.row_len)
+	{
+		free(game->map.grid);
+		free(game->map.row_len);
+		game->map.grid = NULL;
+		game->map.row_len = NULL;
+		return (1);
+	}
+	game->map.height = tmp->size;
+	game->map.width = 0;
+	return (0);
+}
+
+int	build_map(t_game *game, t_line *tmp)
+{
+	int	i;
+	int	len;
+
+	if (tmp->size == 0)
+		return (1);
+	if (alloc_map(game, tmp))
+		return (1);
+	i = 0;
+	while (i < tmp->size)
+	{
+		game->map.grid[i] = tmp->data[i];
+		tmp->data[i] = NULL;
+		len = ft_strlen(game->map.grid[i]);
+		game->map.row_len[i] = len;
+		if (len > game->map.width)
+			game->map.width = len;
+		i++;
+	}
+	game->map.grid[i] = NULL;
+	free(tmp->data);
+	tmp->data = NULL;
+	tmp->size = 0;
+	tmp->capacity = 0;
+	return (validate_map(game));
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_check.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:59:51 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 02:15:12 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	set_player_dir(t_player *player, char c)
+{
+	player->dir.x = 0;
+	player->dir.y = 0;
+	player->plane.x = 0;
+	player->plane.y = 0;
+	if (c == 'N')
+		player->dir.y = -1;
+	else if (c == 'S')
+		player->dir.y = 1;
+	else if (c == 'E')
+		player->dir.x = 1;
+	else
+		player->dir.x = -1;
+	player->plane.x = -player->dir.y * PLANE_LEN;
+	player->plane.y = player->dir.x * PLANE_LEN;
+}
+
+static int	set_player(t_game *game, int x, int y, int *players)
+{
+	char	c;
+
+	if (*players)
+		return (1);
+	c = game->map.grid[y][x];
+	game->player.pos.x = (double)x + 0.5;
+	game->player.pos.y = (double)y + 0.5;
+	set_player_dir(&game->player, c);
+	game->map.grid[y][x] = '0';
+	(*players)++;
+	return (0);
+}
+
+static int	handle_cell(t_game *game, int x, int y, int *players)
+{
+	char	c;
+
+	c = game->map.grid[y][x];
+	if (!is_valid_char(c))
+		return (1);
+	if (is_player_char(c))
+		return (set_player(game, x, y, players));
+	return (0);
+}
+
+static int	scan_map(t_game *game, int *players)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < game->map.height)
+	{
+		x = 0;
+		while (x < game->map.row_len[y])
+		{
+			if (handle_cell(game, x, y, players))
+				return (1);
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}
+
+int	validate_map(t_game *game)
+{
+	int	players;
+
+	players = 0;
+	if (scan_map(game, &players))
+		return (1);
+	if (players != 1)
+		return (1);
+	if (!is_map_closed(&game->map))
+		return (1);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_check_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:57:56 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/15 17:03:19 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	is_player_char(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+int	is_valid_char(char c)
+{
+	return (c == ' ' || c == '1' || c == '0' || is_player_char(c));
+}
+
+static char	get_cell(t_map *map, int x, int y)
+{
+	if (y < 0 || y >= map->height)
+		return (' ');
+	if (x < 0 || x >= map->row_len[y])
+		return (' ');
+	return (map->grid[y][x]);
+}
+
+static int	is_open(t_map *map, int x, int y)
+{
+	if (get_cell(map, x + 1, y) == ' ')
+		return (1);
+	if (get_cell(map, x - 1, y) == ' ')
+		return (1);
+	if (get_cell(map, x, y + 1) == ' ')
+		return (1);
+	if (get_cell(map, x, y - 1) == ' ')
+		return (1);
+	return (0);
+}
+
+int	is_map_closed(t_map *map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->row_len[y])
+		{
+			if (map->grid[y][x] == '0' && is_open(map, x, y))
+				return (0);
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_lines.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:56:21 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 01:48:39 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	has_map_content(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static int	grow_lines(t_line *tmp)
+{
+	int		new_cap;
+	char	**new_data;
+	int		i;
+
+	new_cap = 8;
+	if (tmp->capacity)
+		new_cap = tmp->capacity * 2;
+	new_data = malloc(sizeof(char *) * (new_cap + 1));
+	if (!new_data)
+		return (1);
+	i = 0;
+	while (i < tmp->size)
+	{
+		new_data[i] = tmp->data[i];
+		i++;
+	}
+	new_data[i] = NULL;
+	free(tmp->data);
+	tmp->data = new_data;
+	tmp->capacity = new_cap;
+	return (0);
+}
+
+int	get_map_content(t_line *tmp, bool map_start, char *line)
+{
+	if (!map_start)
+		return (0);
+	if (!has_map_content(line))
+		return (1);
+	if (tmp->size == tmp->capacity && grow_lines(tmp))
+		return (1);
+	tmp->data[tmp->size] = ft_strdup(line);
+	if (!tmp->data[tmp->size])
+		return (1);
+	tmp->size++;
+	tmp->data[tmp->size] = NULL;
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_free.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 18:01:16 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 02:55:47 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	free_tmp_lines(t_line *tmp)
+{
+	int	i;
+
+	if (!tmp || !tmp->data)
+		return ;
+	i = 0;
+	while (i < tmp->size)
+	{
+		free(tmp->data[i]);
+		i++;
+	}
+	free(tmp->data);
+	tmp->data = NULL;
+	tmp->size = 0;
+	tmp->capacity = 0;
+}
+
+static void	free_config(t_config *config)
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		free(config->tex_path[i]);
+		config->tex_path[i] = NULL;
+		i++;
+	}
+	config->has_floor = 0;
+	config->has_ceil = 0;
+}
+
+static void	free_map(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	if (map->grid)
+	{
+		while (map->grid[i])
+		{
+			free(map->grid[i]);
+			i++;
+		}
+		free(map->grid);
+	}
+	free(map->row_len);
+	map->grid = NULL;
+	map->row_len = NULL;
+	map->height = 0;
+	map->width = 0;
+}
+
+void	free_parser_data(t_game *game)
+{
+	free_config(&game->config);
+	free_map(&game->map);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/02 14:56:47 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/06 23:59:45 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	is_dotcub(char *path)
+{
+	int	len;
+
+	len = ft_strlen(path);
+	if (len <= 4)
+		return (0);
+	return (ft_strncmp(path + len - 4, ".cub", 4) == 0);
+}
+
+static void	init_parser(t_game *game, t_line *tmp)
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		game->config.tex_path[i] = NULL;
+		i++;
+	}
+	game->config.floor_color = 0;
+	game->config.ceil_color = 0;
+	game->config.has_floor = 0;
+	game->config.has_ceil = 0;
+	game->map.grid = NULL;
+	game->map.row_len = NULL;
+	game->map.height = 0;
+	game->map.width = 0;
+	tmp->data = NULL;
+	tmp->size = 0;
+	tmp->capacity = 0;
+}
+
+static void	clear_gnl_stash(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+}
+
+static int	parse_fail(char *msg, t_game *game)
+{
+	free_parser_data(game);
+	return (err_msg(msg));
+}
+
+int	parse_scene(char *path, t_game *game)
+{
+	int		fd;
+	int		ret;
+	t_line	tmp_line;
+
+	init_parser(game, &tmp_line);
+	if (!is_dotcub(path))
+		return (err_msg("scene file must end with .cub"));
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (err_msg("cannot open scene file"));
+	ret = read_scene(fd, game, &tmp_line);
+	if (ret)
+		clear_gnl_stash(fd);
+	close(fd);
+	if (ret)
+		return (parse_fail("bad format of .cub file", game));
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_scene.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 16:09:47 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/08 00:05:00 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	strip_line_end(char *line)
+{
+	int	i;
+
+	i = ft_strlen(line);
+	if (i > 0 && line[i - 1] == '\n')
+		line[--i] = '\0';
+	if (i > 0 && line[i - 1] == '\r')
+		line[i - 1] = '\0';
+}
+
+static int	scene_error(char *line, t_line *tmp)
+{
+	if (line)
+		free(line);
+	free_tmp_lines(tmp);
+	return (1);
+}
+
+int	read_scene(int fd, t_game *game, t_line *tmp_line)
+{
+	char	*line;
+	bool	map_start;
+
+	map_start = false;
+	line = get_next_line(fd);
+	while (line)
+	{
+		strip_line_end(line);
+		if (get_map_config(game, &map_start, line))
+			return (scene_error(line, tmp_line));
+		if (get_map_content(tmp_line, map_start, line))
+			return (scene_error(line, tmp_line));
+		free(line);
+		line = get_next_line(fd);
+	}
+	if (!map_start || build_map(game, tmp_line))
+		return (scene_error(NULL, tmp_line));
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/04 12:27:04 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/13 14:47:39 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	err_msg(char *s)
+{
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd("\n", 2);
+	return (1);
+}
+
+static void	destroy_img(t_mlx *mlx, t_img *img)
+{
+	if (!mlx || !mlx->ptr || !img || !img->img)
+		return ;
+	mlx_destroy_image(mlx->ptr, img->img);
+	img->img = NULL;
+	img->addr = NULL;
+}
+
+static void	destroy_textures(t_mlx *mlx)
+{
+	int	i;
+
+	if (!mlx)
+		return ;
+	i = 0;
+	while (i < 4)
+	{
+		destroy_img(mlx, &mlx->tex[i]);
+		i++;
+	}
+}
+
+void	destroy_mlx(t_game *game)
+{
+	t_mlx	*mlx;
+
+	if (!game)
+		return ;
+	mlx = &game->mlx;
+	if (!mlx->ptr)
+		return ;
+	destroy_textures(mlx);
+	destroy_img(mlx, &mlx->frame);
+	if (mlx->win)
+	{
+		mlx_destroy_window(mlx->ptr, mlx->win);
+		mlx->win = NULL;
+	}
+	mlx_destroy_display(mlx->ptr);
+	free(mlx->ptr);
+	mlx->ptr = NULL;
+}
+
+int	on_destroy(void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	mlx_loop_end(game->mlx.ptr);
+	return (0);
+}
+// void	close_window(t_game *game, t_img img)
+// {
+// 	mlx_destroy_image(img.ptr, img.img);
+// 	mlx_destroy_window((img.ptr), img.win);
+// 	mlx_loop_end(img.ptr);
+// 	mlx_destroy_display(img.ptr);
+// 	free(img.ptr);
+// }
+//
+// void	exit_cub3d(t_game *game)
+// {
+// 	close_window(game, game->frame);
+// 	free_parser_data(game);
+// 	exit(1);
+// }
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   door_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/16 18:37:22 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/18 11:54:54 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static int	is_door_cell(t_game *game, int x, int y)
+{
+	if (y < 0 || y >= game->map.height)
+		return (0);
+	if (x < 0 || x >= game->map.row_len[y])
+		return (0);
+	if (game->map.grid[y][x] == '2')
+		return (1);
+	if (game->map.grid[y][x] == '3')
+		return (1);
+	return (0);
+}
+
+static int	get_door_target(t_game *game, int *x, int *y)
+{
+	double	d;
+	int		cell_x;
+	int		cell_y;
+
+	d = 0.20;
+	while (d <= DOOR_RANGE)
+	{
+		cell_x = (int)floor(game->player.pos.x + game->player.dir.x * d);
+		cell_y = (int)floor(game->player.pos.y + game->player.dir.y * d);
+		if (is_door_cell(game, cell_x, cell_y))
+		{
+			*x = cell_x;
+			*y = cell_y;
+			return (1);
+		}
+		d += DOOR_STEP;
+	}
+	return (0);
+}
+
+static int	can_close_door(t_game *game, int x, int y)
+{
+	char	old;
+	int		ret;
+
+	old = game->map.grid[y][x];
+	game->map.grid[y][x] = '2';
+	ret = can_stand_at(game, game->player.pos.x, game->player.pos.y);
+	game->map.grid[y][x] = old;
+	return (ret);
+}
+
+static int	toggle_door_cell(t_game *game, int x, int y)
+{
+	char	*cell;
+
+	cell = &game->map.grid[y][x];
+	if (*cell == '2')
+	{
+		*cell = '3';
+		return (1);
+	}
+	if (*cell == '3' && can_close_door(game, x, y))
+	{
+		*cell = '2';
+		return (1);
+	}
+	return (0);
+}
+
+int	door_open(t_game *game)
+{
+	int	x;
+	int	y;
+
+	if (!get_door_target(game, &x, &y))
+		return (0);
+	return (toggle_door_cell(game, x, y));
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 12:39:57 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 13:32:44 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	set_key_state(int keycode, t_game *game, int state)
+{
+	if (keycode == KEY_W)
+		game->keys.w = state;
+	else if (keycode == KEY_A)
+		game->keys.a = state;
+	else if (keycode == KEY_S)
+		game->keys.s = state;
+	else if (keycode == KEY_D)
+		game->keys.d = state;
+	else if (keycode == KEY_LEFT)
+		game->keys.left = state;
+	else if (keycode == KEY_RIGHT)
+		game->keys.right = state;
+	else if (keycode == KEY_F)
+		game->keys.f = state;
+}
+
+static int	handle_action_key(int keycode, t_game *game)
+{
+	if (keycode != KEY_F)
+		return (0);
+	if (!game->keys.f)
+	{
+		game->keys.f = 1;
+		if (door_open(game))
+			start_engine(game);
+	}
+	return (1);
+}
+
+void	setup_hooks(t_game *game)
+{
+	mlx_hook(game->mlx.win, EV_KEYPRESS, M_KEYPRESS, on_key_press, game);
+	mlx_hook(game->mlx.win, EV_KEYRELEASE, M_KEYRELEASE, on_key_release, game);
+	mlx_hook(game->mlx.win, EV_DESTROY, 0, on_destroy, game);
+	mlx_expose_hook(game->mlx.win, on_expose, game);
+	mlx_loop_hook(game->mlx.ptr, game_loop, game);
+	setup_mouse_hook(game);
+}
+
+int	on_key_press(int keycode, void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	if (keycode == KEY_ESC)
+		return (on_destroy(game));
+	if (handle_action_key(keycode, game))
+		return (0);
+	set_key_state(keycode, game, 1);
+	return (0);
+}
+
+int	on_key_release(int keycode, void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	set_key_state(keycode, game, 0);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_check_utils_bonus.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/06 17:57:56 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 14:56:04 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	is_player_char(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+int	is_valid_char(char c)
+{
+	return (c == ' ' || c == '1' || c == '0' || c == '2'
+		|| c == '3' || is_player_char(c));
+}
+
+static char	get_cell(t_map *map, int x, int y)
+{
+	if (y < 0 || y >= map->height)
+		return (' ');
+	if (x < 0 || x >= map->row_len[y])
+		return (' ');
+	return (map->grid[y][x]);
+}
+
+static int	is_open(t_map *map, int x, int y)
+{
+	if (get_cell(map, x + 1, y) == ' ')
+		return (1);
+	if (get_cell(map, x - 1, y) == ' ')
+		return (1);
+	if (get_cell(map, x, y + 1) == ' ')
+		return (1);
+	if (get_cell(map, x, y - 1) == ' ')
+		return (1);
+	return (0);
+}
+
+int	is_map_closed(t_map *map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->row_len[y])
+		{
+			if ((map->grid[y][x] == '0' || map->grid[y][x] == '3' ||
+				map->grid[y][x] == '2')
+				&& is_open(map, x, y))
+				return (0);
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mini-map_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/05 17:53:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/17 15:58:58 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	draw_cub(t_game *game, int y, int x, int color)
+{
+	int		i;
+	t_vec	max_win;
+	t_vec	min_win;
+
+	min_win.y = y * game->mini_map.width / minimap_W;
+	max_win.y = (y + 1) * game->mini_map.width / minimap_W;
+	i = 0;
+	while (i < game->mini_map.width / minimap_W)
+	{
+		max_win.x = i + ((x * game->mini_map.width) / minimap_W);
+		min_win.x = i + ((x * game->mini_map.width) / minimap_W);
+		draw_vertical_line(game, min_win, max_win, color);
+		i++;
+	}
+}
+
+void	draw_mini_map(t_game *game, t_minimap *m, int i)
+{
+	while (i < minimap_W)
+	{
+		if (m->mapY < 0 || m->mapY >= game->map.height || m->mapX < 0
+			|| m->mapX >= game->map.row_len[m->mapY])
+			m->mapX = m->mapX;
+		else if (m->mapX == (int)game->player.pos.x
+			&& m->mapY == (int)game->player.pos.y)
+			draw_cub(game, m->Ydraw, m->Xdraw, 0xFF0000);
+		else if (game->map.grid[m->mapY][m->mapX] == '0')
+			draw_cub(game, m->Ydraw, m->Xdraw, 0x000000);
+		else if (game->map.grid[m->mapY][m->mapX] == '1')
+			draw_cub(game, m->Ydraw, m->Xdraw, 0x0010FF);
+		else if (game->map.grid[m->mapY][m->mapX] == '2'
+			|| game->map.grid[m->mapY][m->mapX] == '3')
+			draw_cub(game, m->Ydraw, m->Xdraw, 0x8A3A01);
+		i++;
+		m->Xdraw++;
+		m->mapX++;
+	}
+}
+
+void	mini_map(t_game *game, t_minimap m)
+{
+	int	startx;
+	int	i;
+
+	m.mapX = (int)game->player.pos.x - (int)(minimap_W / 2);
+	m.mapY = (int)game->player.pos.y - (int)(minimap_W / 2);
+	startx = m.mapX;
+	while (m.mapY - ((int)game->player.pos.y - (int)(minimap_W
+			/ 2)) < minimap_W)
+	{
+		m.mapX = startx;
+		i = 0;
+		m.Ydraw = m.mapY - ((int)game->player.pos.y - (int)(minimap_W / 2));
+		m.Xdraw = m.mapX - ((int)game->player.pos.x - (int)(minimap_W / 2));
+		draw_mini_map(game, &m, i);
+		m.mapY++;
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:41:11 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/11 12:31:49 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	setup_mouse_hook(t_game *game)
+{
+	mlx_hook(game->mlx.win, EV_MOUSEMOVE, M_MOUSEMOVE, on_mouse_move, game);
+	mlx_mouse_hide(game->mlx.ptr, game->mlx.win);
+	mlx_mouse_move(game->mlx.ptr, game->mlx.win, WIN_W / 2, WIN_H / 2);
+}
+
+int	on_mouse_move(int x, int y, void *param)
+{
+	int		center_x;
+	int		delta_x;
+	t_game	*game;
+
+	game = (t_game *)param;
+	(void)y;
+	center_x = WIN_W / 2;
+	delta_x = x - center_x;
+	if (delta_x == 0)
+		return (0);
+	game->keys.mouse_dx += delta_x;
+	mlx_mouse_move(game->mlx.ptr, game->mlx.win,
+		center_x, WIN_H / 2);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_bonus.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/18 01:01:53 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	calcul_sidedist(t_game *game, t_ray *ray)
+{
+	if (ray->rayDir.x < 0)
+	{
+		ray->step.x = -1;
+		ray->sideDist.x = (game->player.pos.x - ray->mapX) * ray->deltaDist.x;
+	}
+	else
+	{
+		ray->step.x = 1;
+		ray->sideDist.x = (ray->mapX + 1.0 - game->player.pos.x)
+			* ray->deltaDist.x;
+	}
+	if (ray->rayDir.y < 0)
+	{
+		ray->step.y = -1;
+		ray->sideDist.y = (game->player.pos.y - ray->mapY) * ray->deltaDist.y;
+	}
+	else
+	{
+		ray->step.y = 1;
+		ray->sideDist.y = (ray->mapY + 1.0 - game->player.pos.y)
+			* ray->deltaDist.y;
+	}
+}
+
+int	algorithme_dda(t_game *game, t_ray *ray)
+{
+	int	side;
+
+	while (1)
+	{
+		if (ray->sideDist.x < ray->sideDist.y)
+		{
+			ray->sideDist.x += ray->deltaDist.x;
+			ray->mapX += ray->step.x;
+			side = 0;
+		}
+		else
+		{
+			ray->sideDist.y += ray->deltaDist.y;
+			ray->mapY += ray->step.y;
+			side = 1;
+		}
+		if (ray->mapY < 0 || ray->mapY >= game->map.height)
+			return (-1);
+		if (ray->mapX < 0 || ray->mapX >= game->map.row_len[ray->mapY])
+			return (-1);
+		if (game->map.grid[ray->mapY][ray->mapX] == '1'
+			|| game->map.grid[ray->mapY][ray->mapX] == '2')
+			break ;
+	}
+	return (side);
+}
+
+void	calcul_nb_texture(t_game *game, t_ray *ray)
+{
+	if (game->map.grid[ray->mapY][ray->mapX] == '2')
+		ray->tex = 4;
+	else if (ray->side == 0
+		&& ((ray->mapX - 1 >= 0
+				&& game->map.grid[ray->mapY][ray->mapX - 1] == '3')
+		|| ((ray->mapX + 1) < game->map.row_len[ray->mapY]
+			&& game->map.grid[ray->mapY][ray->mapX + 1] == '3')))
+		ray->tex = 5;
+	else if (ray->side == 1
+		&& ((ray->mapY - 1 >= 0
+				&& game->map.grid[ray->mapY - 1][ray->mapX] == '3')
+		|| ((ray->mapY + 1) < game->map.height
+			&& game->map.grid[ray->mapY + 1][ray->mapX] == '3')))
+		ray->tex = 6;
+	else if (ray->side == 1 && ray->mapY < game->player.pos.y)
+		ray->tex = 0;
+	else if (ray->side == 1)
+		ray->tex = 1;
+	else if (ray->rayDir.x < 0)
+		ray->tex = 2;
+	else
+		ray->tex = 3;
+}
+
+void	init_ray(t_game *game, t_ray *ray, int nb)
+{
+	double	camerax;
+
+	ray->mapX = (int)game->player.pos.x;
+	ray->mapY = (int)game->player.pos.y;
+	camerax = 2 * nb / (double)WIN_W - 1;
+	ray->rayDir.x = game->player.dir.x + game->player.plane.x * camerax;
+	ray->rayDir.y = game->player.dir.y + game->player.plane.y * camerax;
+	ray->deltaDist.x = fabs(1 / ray->rayDir.x);
+	ray->deltaDist.y = fabs(1 / ray->rayDir.y);
+}
+
+double	launch_ray(int nb, t_game *game, t_ray *ray)
+{
+	double	perp_wall_dist;
+
+	init_ray(game, ray, nb);
+	calcul_sidedist(game, ray);
+	ray->side = algorithme_dda(game, ray);
+	if (ray->side == 0)
+		perp_wall_dist = (ray->mapX - game->player.pos.x + (1
+					- (double)ray->step.x) / 2) / ray->rayDir.x;
+	else
+		perp_wall_dist = (ray->mapY - game->player.pos.y + (1
+					- (double)ray->step.y) / 2) / ray->rayDir.y;
+	if (ray->side == 0)
+		ray->wallX = game->player.pos.y + perp_wall_dist * ray->rayDir.y;
+	else
+		ray->wallX = game->player.pos.x + perp_wall_dist * ray->rayDir.x;
+	ray->wallX -= floor(ray->wallX);
+	calcul_nb_texture(game, ray);
+	ray->texX = (int)(ray->wallX * game->mlx.tex[ray->tex].width);
+	return (perp_wall_dist);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   start-engine_bonus.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
+/*   Updated: 2026/06/18 11:05:14 by tle-rhun         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	start_engine(t_game *game)
+{
+	int		i;
+	double	dist_ray;
+	t_vec	high_wall;
+	t_vec	low_wall;
+
+	if (WIN_W >= WIN_H)
+		game->mini_map.width = WIN_H / 5;
+	else
+		game->mini_map.width = WIN_W / 5;
+	i = 0;
+	while (i < WIN_W)
+	{
+		dist_ray = launch_ray(i, game, &game->ray);
+		high_wall.x = i;
+		high_wall.y = WIN_H / 2 - ((1 / dist_ray * WIN_H) / 2);
+		low_wall.x = i;
+		low_wall.y = WIN_H / 2 + ((1 / dist_ray * WIN_H / 2));
+		draw_window(game, i, high_wall, low_wall);
+		i++;
+	}
+	if (game->map.height > 5 && game->map.width > 5)
+		mini_map(game, game->mini_map);
+	mlx_put_image_to_window(game->mlx.ptr, game->mlx.win, game->mlx.frame.img,
+		0, 0);
+}
+
+int	load_texture(t_game *game, t_img *tex, int i)
+{
+	int	len;
+
+	len = ft_strlen(game->config.tex_path[i]);
+	if (len <= 4)
+		return (err_msg("textures file must end with .xpm"));
+	if (ft_strncmp(game->config.tex_path[i] + len - 4, ".xpm", 4) != 0)
+		return (err_msg("textures file must end with .xpm"));
+	tex->img = mlx_xpm_file_to_image(game->mlx.ptr, game->config.tex_path[i],
+			&game->mlx.tex[i].width, &game->mlx.tex[i].height);
+	if (!tex->img)
+		return (err_msg("texture load failed, expected a valid XPM file"));
+	tex->addr = (int *)mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
+			&tex->endian);
+	if (!tex->addr)
+		return (err_msg("texture load failed, expected a valid XPM file"));
+	tex->line_len /= 4;
+	return (0);
+}
+
+void	fill_path_door(t_config *config)
+{
+	config->tex_path[4] = "./textures/doors-close.xpm";
+	config->tex_path[5] = "./textures/doors-left.xpm";
+	config->tex_path[6] = "./textures/doors-right.xpm";
+}
+
+int	init_mlx(t_game *game, t_mlx *mlx)
+{
+	int	i;
+
+	i = 0;
+	mlx->ptr = mlx_init();
+	if (!mlx->ptr)
+		return (err_msg("mlx: init failed"));
+	mlx->win = mlx_new_window(mlx->ptr, WIN_W, WIN_H, WIN_TITLE);
+	if (!mlx->win)
+		return (err_msg("mlx: window creation failed"));
+	mlx->frame.width = WIN_W;
+	mlx->frame.height = WIN_H;
+	mlx->frame.img = mlx_new_image(mlx->ptr, WIN_W, WIN_H);
+	if (!mlx->frame.img)
+		return (err_msg("mlx: image creation failed"));
+	mlx->frame.addr = (int *)mlx_get_data_addr(mlx->frame.img, &mlx->frame.bpp,
+			&mlx->frame.line_len, &mlx->frame.endian);
+	mlx->frame.line_len /= 4;
+	fill_path_door(&game->config);
+	while (i < 7)
+	{
+		if (load_texture(game, &game->mlx.tex[i], i))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	main(int ac, char **av)
+{
+	t_game	game;
+
+	if (ac != 2)
+		return (err_msg("usage: ./cub3D <map.cub>"));
+	ft_bzero(&game, sizeof(t_game));
+	if (parse_scene(av[1], &game))
+		return (1);
+	if (init_mlx(&game, &game.mlx))
+	{
+		destroy_mlx(&game);
+		free_parser_data(&game);
+		return (1);
+	}
+	setup_hooks(&game);
+	start_engine(&game);
+	mlx_loop(game.mlx.ptr);
+	destroy_mlx(&game);
+	free_parser_data(&game);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 00:56:19 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static void	add_forward_move(t_game *game, double *dx, double *dy)
+{
+	if (game->keys.w)
+	{
+		*dx += game->player.dir.x;
+		*dy += game->player.dir.y;
+	}
+	if (game->keys.s)
+	{
+		*dx -= game->player.dir.x;
+		*dy -= game->player.dir.y;
+	}
+}
+
+static void	add_strafe_move(t_game *game, double *dx, double *dy)
+{
+	double	right_x;
+	double	right_y;
+
+	right_x = -game->player.dir.y;
+	right_y = game->player.dir.x;
+	if (game->keys.d)
+	{
+		*dx += right_x;
+		*dy += right_y;
+	}
+	if (game->keys.a)
+	{
+		*dx -= right_x;
+		*dy -= right_y;
+	}
+}
+
+static int	normalize_move(double *dx, double *dy)
+{
+	double	len;
+
+	len = sqrt((*dx * *dx) + (*dy * *dy));
+	if (len == 0)
+		return (0);
+	*dx = (*dx / len) * MOVE_SPEED;
+	*dy = (*dy / len) * MOVE_SPEED;
+	return (1);
+}
+
+int	update_player(t_game *game)
+{
+	double	dx;
+	double	dy;
+
+	dx = 0;
+	dy = 0;
+	add_forward_move(game, &dx, &dy);
+	add_strafe_move(game, &dx, &dy);
+	if (!normalize_move(&dx, &dy))
+		return (0);
+	return (move_player(game, dx, dy));
+}
+
+int	game_loop(void *param)
+{
+	int		changed;
+	t_game	*game;
+
+	game = (t_game *)param;
+	changed = update_rotation(game);
+	if (update_player(game))
+		changed = 1;
+	if (changed)
+		start_engine(game);
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_rotation_bonus.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/18 00:55:25 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 00:55:44 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+static double	get_rotation_angle(t_game *game)
+{
+	double	angle;
+
+	angle = 0;
+	if (game->keys.left)
+		angle -= ROT_SPEED;
+	if (game->keys.right)
+		angle += ROT_SPEED;
+	if (game->keys.mouse_dx)
+	{
+		angle += game->keys.mouse_dx * MOUSE_SENS;
+		game->keys.mouse_dx = 0;
+	}
+	return (angle);
+}
+
+int	update_rotation(t_game *game)
+{
+	double	angle;
+
+	angle = get_rotation_angle(game);
+	if (angle == 0)
+		return (0);
+	rotate_player(&game->player, angle);
+	return (1);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lozhao <lozhao@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/18 15:35:57 by lozhao            #+#    #+#             */
+/*   Updated: 2026/06/18 15:36:21 by lozhao           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+int	err_msg(char *s)
+{
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd("\n", 2);
+	return (1);
+}
+
+static void	destroy_img(t_mlx *mlx, t_img *img)
+{
+	if (!mlx || !mlx->ptr || !img || !img->img)
+		return ;
+	mlx_destroy_image(mlx->ptr, img->img);
+	img->img = NULL;
+	img->addr = NULL;
+}
+
+static void	destroy_textures(t_mlx *mlx)
+{
+	int	i;
+
+	if (!mlx)
+		return ;
+	i = 0;
+	while (i < 7)
+	{
+		destroy_img(mlx, &mlx->tex[i]);
+		i++;
+	}
+}
+
+void	destroy_mlx(t_game *game)
+{
+	t_mlx	*mlx;
+
+	if (!game)
+		return ;
+	mlx = &game->mlx;
+	if (!mlx->ptr)
+		return ;
+	destroy_textures(mlx);
+	destroy_img(mlx, &mlx->frame);
+	if (mlx->win)
+	{
+		mlx_destroy_window(mlx->ptr, mlx->win);
+		mlx->win = NULL;
+	}
+	mlx_destroy_display(mlx->ptr);
+	free(mlx->ptr);
+	mlx->ptr = NULL;
+}
+
+int	on_destroy(void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	mlx_loop_end(game->mlx.ptr);
+	return (0);
+}
+// void	close_window(t_game *game, t_img img)
+// {
+// 	mlx_destroy_image(img.ptr, img.img);
+// 	mlx_destroy_window((img.ptr), img.win);
+// 	mlx_loop_end(img.ptr);
+// 	mlx_destroy_display(img.ptr);
+// 	free(img.ptr);
+// }
+//
+// void	exit_cub3d(t_game *game)
+// {
+// 	close_window(game, game->frame);
+// 	free_parser_data(game);
+// 	exit(1);
+// }

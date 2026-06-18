@@ -33,7 +33,6 @@ PARSER_FILES =	$(D_PARSE)parse_scene.c \
 				$(D_PARSE)map_check.c \
 				$(D_PARSE)parser_free.c \
 				$(D_GNL)get_next_line.c \
-				$(D_UTILS)utils.c \
 				$(D_GNL)get_next_line_utils.c
 
 ENGINE_FILES = $(D_ENGINE)start-engine.c \
@@ -62,8 +61,8 @@ BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
 					$(D_BONUS)door_bonus.c \
 					$(D_BONUS)mouse_bonus.c
 
-SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(D_PARSE)map_check_utils.c $(EVENT_FILES)
-BONUS_SRC_FILES = $(BONUS_ENGINE_FILES) $(PARSER_FILES) $(D_BONUS)map_check_utils_bonus.c $(BONUS_EVENT_FILES)
+SRC_FILES = $(ENGINE_FILES) $(PARSER_FILES) $(D_PARSE)map_check_utils.c $(EVENT_FILES) $(D_UTILS)utils.c
+BONUS_SRC_FILES = $(BONUS_ENGINE_FILES) $(PARSER_FILES) $(D_BONUS)map_check_utils_bonus.c $(BONUS_EVENT_FILES) $(D_BONUS)utils_bonus.c
 
 TEST_FILES = $(D_TEST)test_parser.c $(PARSER_FILES)
 

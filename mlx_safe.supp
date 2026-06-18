@@ -1,0 +1,692 @@
+# mlx_safe.supp
+# Generated from your Valgrind output for cub3D + MiniLibX on Linux/X11.
+# Purpose: hide external MiniLibX/X11/Xcursor/dlopen noise only.
+#
+# Important:
+# - This file suppresses Memcheck:Param from X11 writev noise.
+# - This file suppresses only reachable leaks.
+# - It intentionally does NOT suppress definite or indirect leaks.
+#
+# In your current log, the real texture leak through mlx_xpm_file_to_image
+# remains visible and should be fixed with mlx_destroy_image on every texture.
+
+
+{
+   x11_writev_param_01
+   Memcheck:Param
+   writev(vector[0])
+   fun:writev
+   fun:write_vec
+   fun:_xcb_conn_wait.part.0
+   fun:_xcb_conn_wait
+   fun:_xcb_out_send
+   fun:xcb_writev
+   fun:xcb_writev
+   fun:_XSend
+   fun:_XFlush
+   fun:_XFlush
+   fun:XFlush
+   fun:start_engine
+   fun:main
+}
+
+{
+   mlx_x11_reachable_02
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_reachable_03
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:_XlcResolveLocaleName
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+}
+
+{
+   mlx_x11_reachable_04
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+}
+
+{
+   mlx_x11_reachable_05
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcAddLoader
+   fun:_XlcInitLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+}
+
+{
+   mlx_x11_reachable_06
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcAddLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+}
+
+{
+   mlx_x11_reachable_07
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:reallocarray
+   fun:add_codeset
+   fun:load_generic
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+}
+
+{
+   mlx_x11_reachable_08
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+   fun:XCreateBitmapFromData
+}
+
+{
+   mlx_x11_reachable_09
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:add_charset
+   fun:load_generic
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_reachable_10
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:malloc
+   fun:strdup
+   fun:_dl_load_cache_lookup
+   fun:_dl_map_object
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+}
+
+{
+   mlx_x11_reachable_11
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:malloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+}
+
+{
+   mlx_x11_reachable_12
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:create.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_reachable_13
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:PutEntry.part.0.lto_priv.0
+   fun:PutEntry
+   fun:GetDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+   fun:XCreateBitmapFromData
+   fun:mlx_mouse_hide
+}
+
+{
+   mlx_x11_reachable_14
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+}
+
+{
+   mlx_x11_reachable_15
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:malloc
+   fun:strdup
+   fun:_dl_load_cache_lookup
+   fun:_dl_map_object
+   fun:openaux
+   fun:_dl_catch_exception
+   fun:_dl_map_object_deps
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+}
+
+{
+   mlx_x11_reachable_16
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:malloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:openaux
+   fun:_dl_catch_exception
+   fun:_dl_map_object_deps
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+}
+
+{
+   mlx_x11_reachable_17
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   fun:_XlcInitCTInfo
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+}
+
+{
+   mlx_x11_reachable_18
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ExpandQuarkTable
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+   fun:XCreateBitmapFromData
+   fun:mlx_mouse_hide
+   fun:setup_mouse_hook
+}
+
+{
+   mlx_x11_reachable_19
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcSetConverter
+   fun:_XlcInitCTInfo
+   fun:_XlcInitCTInfo
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+}
+
+{
+   mlx_x11_reachable_20
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcSetConverter
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+}
+
+{
+   mlx_x11_reachable_21
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcSetConverter
+   fun:_XlcAddUtf8Converters
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_reachable_22
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:append_value_list
+   fun:store_to_database
+   fun:f_newline
+   fun:CreateDatabase
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+}
+
+{
+   mlx_x11_reachable_23
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:add_codeset
+   fun:load_generic
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+}
+
+{
+   mlx_x11_reachable_24
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:create.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+}
+
+{
+   mlx_x11_reachable_25
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:store_to_database
+   fun:f_newline
+   fun:CreateDatabase
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+}
+
+{
+   mlx_x11_reachable_26
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+}
+
+{
+   mlx_x11_reachable_27
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:calloc
+   fun:_dl_check_map_versions
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen_implementation
+   fun:dlopen@@GLIBC_2.34
+}
+
+{
+   mlx_x11_reachable_28
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcCreateDefaultCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   fun:_XlcInitCTInfo
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+}
+
+{
+   mlx_x11_reachable_29
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:store_to_database
+   fun:f_newline
+   fun:CreateDatabase
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+}
+
+{
+   mlx_x11_reachable_30
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_XlcAddCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   fun:_XlcInitCTInfo
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+}
+
+{
+   mlx_x11_reachable_31
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:calloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+}
+
+{
+   mlx_x11_reachable_32
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:init_parse_info
+   fun:CreateDatabase
+   fun:_XlcCreateLocaleDataBase
+   fun:load_public
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+}
+
+{
+   mlx_x11_reachable_33
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:calloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:openaux
+   fun:_dl_catch_exception
+   fun:_dl_map_object_deps
+   fun:dl_open_worker_begin
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+}
+
+{
+   mlx_x11_reachable_34
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:_XlcCreateDefaultCharSet
+   fun:_XlcAddCT
+   fun:_XlcInitCTInfo
+   fun:_XlcInitCTInfo
+   fun:initialize.lto_priv.1
+   fun:initialize.lto_priv.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+}
+
+{
+   mlx_x11_reachable_35
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:ExpandQuarkTable
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+   fun:XCreateBitmapFromData
+   fun:mlx_mouse_hide
+   fun:setup_mouse_hook
+}
+
+{
+   mlx_x11_reachable_36
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:permalloc
+   fun:_Xpermalloc
+   fun:ExpandQuarkTable
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   fun:InitDefaults
+   fun:XGetDefault
+   fun:_XcursorGetDisplayInfo
+   fun:XcursorSupportsARGB
+   fun:XcursorNoticeCreateBitmap
+   fun:XCreatePixmap
+   fun:XCreateBitmapFromData
+   fun:mlx_mouse_hide
+}

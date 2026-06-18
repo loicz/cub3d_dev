@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 17:57:56 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/18 02:24:46 by lozhao           ###   ########.fr       */
+/*   Updated: 2026/06/18 14:56:04 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	is_map_closed(t_map *map)
 		x = 0;
 		while (x < map->row_len[y])
 		{
-			if ((map->grid[y][x] == '0' || map->grid[y][x] == '3')
+			if ((map->grid[y][x] == '0' || map->grid[y][x] == '3' ||
+				map->grid[y][x] == '2')
 				&& is_open(map, x, y))
 				return (0);
 			x++;
