@@ -117,7 +117,7 @@ fclean: clean
 re: fclean all
 
 val : ${NAME}
-	@$(VAL) $(LEAKS) $(SUPP) ./$(NAME) ./maps/basic.cub
+	@$(VAL) $(LEAKS) $(SUPP) ./$(NAME) ./maps/test-parsing.cub
 
 parser: $(TEST)
 	@echo "$(TEST) ✅"
