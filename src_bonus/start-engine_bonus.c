@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 14:44:12 by tle-rhun          #+#    #+#             */
-/*   Updated: 2026/06/17 15:59:19 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 11:05:14 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,13 @@ void	start_engine(t_game *game)
 
 int	load_texture(t_game *game, t_img *tex, int i)
 {
+	int	len;
+
+	len = ft_strlen(game->config.tex_path[i]);
+	if (len <= 4)
+		return (err_msg("textures file must end with .xpm"));
+	if (ft_strncmp(game->config.tex_path[i] + len - 4, ".xpm", 4) != 0)
+		return (err_msg("textures file must end with .xpm"));
 	tex->img = mlx_xpm_file_to_image(game->mlx.ptr, game->config.tex_path[i],
 			&game->mlx.tex[i].width, &game->mlx.tex[i].height);
 	if (!tex->img)
