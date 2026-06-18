@@ -65,7 +65,7 @@ Run the executable by passing a valid configuration file with a `.cub` extension
 *    Fran-Byte cub3D Approach Guide - Structural guidelines for the project.
 *    Nathan's cub3D Project Overview - Inspiration on engineering math workflows.
 *    HackMD cub3D Reference - Notes on data structures and key bindings.
-*    Cub3d-Linux GitHub Repository - Multi-platform reference setup for miniLibX under Linux.
+*    [Cub3d-Linux GitHub iciamyplant](https://github.com/iciamyplant/Cub3d-Linux) - Multi-platform reference setup for miniLibX under Linux.
 
 ### AI Usage Disclosure
 
