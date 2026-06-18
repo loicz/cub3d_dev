@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by tle-rhun and lozhao.*
+*This project has been created as part of the 42 curriculum by tle-rhun andlozhao.*
 
 # cub3D - My first RayCaster with miniLibX
 
@@ -50,7 +50,7 @@ Run the executable by passing a valid configuration file with a `.cub` extension
 
 ```bash
 # For the mandatory part
-./cub3D maps/mandatory_map.cub
+./cub3D maps/basic.cub
 
 # For the bonus part
 ./cub3D maps/basic_door.cub
