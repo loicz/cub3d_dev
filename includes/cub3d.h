@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 14:41:53 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/17 10:34:17 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 00:49:10 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@
 # define M_MOUSEMOVE 64L
 # define MOUSE_SENS 0.002
 
+// DOOR BONUS
+# define DOOR_RANGE 1.50
+# define DOOR_STEP 0.05
 // DATA TYPE
 
 typedef struct s_line
@@ -236,7 +239,8 @@ int				can_stand_at(t_game *game, double x, double y);
 int				is_walkable(t_game *game, int x, int y);
 void			rotate_player(t_player *player, double angle);
 int				on_expose(void *param);
-int				door_open(t_game *game, t_ray ray);
+int				door_open(t_game *game);
+int				update_rotation(t_game *game);
 
 // ENGINE ENTRY
 void			start_engine(t_game *game);

@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 12:39:57 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/16 18:32:47 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 00:53:15 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ static void	set_key_state(int keycode, t_game *game, int state)
 		game->keys.right = state;
 }
 
+static int	handle_action_key(int keycode, t_game *game)
+{
+	if (keycode != KEY_F)
+		return (0);
+	if (!game->keys.f)
+	{
+		game->keys.f = 1;
+		if (door_open(game))
+			start_engine(game);
+	}
+	return (1);
+}
+
 void	setup_hooks(t_game *game)
 {
 	mlx_hook(game->mlx.win, EV_KEYPRESS, M_KEYPRESS, on_key_press, game);
@@ -47,6 +60,8 @@ int	on_key_press(int keycode, void *param)
 	game = (t_game *)param;
 	if (keycode == KEY_ESC)
 		return (on_destroy(game));
+	if (handle_action_key(keycode, game))
+		return (0);
 	set_key_state(keycode, game, 1);
 	return (0);
 }

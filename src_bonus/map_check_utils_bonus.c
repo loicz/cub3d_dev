@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_check_utils.c                                  :+:      :+:    :+:   */
+/*   map_check_utils_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 17:57:56 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/15 16:59:53 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 02:24:46 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	is_player_char(char c)
 
 int	is_valid_char(char c)
 {
-	return (c == ' ' || c == '1' || c == '0' || c == '2' || c == '3'
-		|| is_player_char(c));
+	return (c == ' ' || c == '1' || c == '0' || c == '2'
+		|| c == '3' || is_player_char(c));
 }
 
 static char	get_cell(t_map *map, int x, int y)
@@ -56,7 +56,8 @@ int	is_map_closed(t_map *map)
 		x = 0;
 		while (x < map->row_len[y])
 		{
-			if (map->grid[y][x] == '0' && is_open(map, x, y))
+			if ((map->grid[y][x] == '0' || map->grid[y][x] == '3')
+				&& is_open(map, x, y))
 				return (0);
 			x++;
 		}

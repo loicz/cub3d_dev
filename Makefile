@@ -54,6 +54,7 @@ EVENT_FILES =	$(D_EVENTS)hooks.c \
 
 BONUS_EVENT_FILES =	$(D_BONUS)hooks_bonus.c \
 					$(D_BONUS)update_bonus.c \
+					$(D_BONUS)update_rotation_bonus.c \
 					$(D_EVENTS)move.c \
 					$(D_EVENTS)rotate.c \
 					$(D_EVENTS)expose.c \

@@ -6,7 +6,7 @@
 /*   By: tle-rhun <tle-rhun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 11:40:25 by lozhao            #+#    #+#             */
-/*   Updated: 2026/06/17 16:00:09 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2026/06/18 00:56:19 by lozhao           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,31 +73,11 @@ int	update_player(t_game *game)
 
 int	game_loop(void *param)
 {
-	double	angle;
 	int		changed;
 	t_game	*game;
 
 	game = (t_game *)param;
-	angle = 0;
-	changed = 0;
-	if (game->keys.left)
-		angle -= ROT_SPEED;
-	if (game->keys.right)
-		angle += ROT_SPEED;
-	if (game->keys.mouse_dx)
-	{
-		angle += game->keys.mouse_dx * MOUSE_SENS;
-		game->keys.mouse_dx = 0;
-	}
-	if (angle != 0)
-	{
-		rotate_player(&game->player, angle);
-		changed = 1;
-	}
-	if (game->keys.f
-		&& game->map.grid[(int)game->player.pos.y]
-		[(int)game->player.pos.x] == '0')
-		changed = door_open(game, game->ray);
+	changed = update_rotation(game);
 	if (update_player(game))
 		changed = 1;
 	if (changed)
